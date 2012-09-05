@@ -1,5 +1,7 @@
 #!/usr/bin/python2
 
+from compiler.ast import *
+
 temp_var_c = 0
 
 def gen_temp():
@@ -8,6 +10,12 @@ def gen_temp():
 	return tmp
 
 def flatten(n):
+	if isinstance(n,Module):
+		return flatten(n.node)
+	if isinstance(n,Stmt):
+
+	if isinstance(n,Printnl):
+		return flatten(n.nodes[0])
 	if isinstance(n,Name):
 		return ( n, [] )
 	elif isinstance( n, Const ):
