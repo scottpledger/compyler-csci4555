@@ -13,7 +13,7 @@ def flatten(n):
 	if isinstance(n,Module):
 		return flatten(n.node)
 	if isinstance(n,Stmt):
-		
+		return ( n, sum( [ flatten(m) for m in n.nodes ] ) )
 	if isinstance(n,Printnl):
 		return flatten(n.nodes[0])
 	if isinstance(n,Name):
