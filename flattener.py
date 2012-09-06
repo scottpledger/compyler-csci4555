@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 
-from compiler.ast import *
+from compiler import *
 
 temp_var_c = 0
 
@@ -12,13 +12,19 @@ def gen_temp():
 def flatten(n):
 	if isinstance(n,Module):
 		return flatten(n.node)
-	if isinstance(n,Stmt):
+	elif isinstance(n,Stmt):
 		return ( n, sum( [ flatten(m) for m in n.nodes ] ) )
-	if isinstance(n,Printnl):
-		return flatten(n.nodes[0])
-	if isinstance(n,Name):
-		return ( n, [] )
+	elif isinstance(n,Printnl):
+		return ( n, flatten(n.nodes[0]) )
+	elif isinstance(n,Assign):
+		return ( n, sum( [ flatten(m) for m in n.nodes ] + [flatten(n.expr)] ) )
+	elif isinstance(n,AssName):
+		return ( n, sum( [ flatten(m) for m in n.nodes ] ) )
+	elif isinstance(n, Discard):
+		return ( n, flatten(n.expr) )
 	elif isinstance( n, Const ):
+		return ( n, [] )
+	elif isinstance(n,Name):
 		return ( n, [] )
 	elif isinstance( n, Add ):
 		(l,ss1) = flatten(n.left)
@@ -26,5 +32,9 @@ def flatten(n):
 		t = gen_temp()
 		ss3 = [Assign(AssName(t),Add((l,r)))]
 		return ( Name( t ) , ss1 + ss2 + ss3 )
+	elif isinstance( n, UnarySub ):
+		return ( n, flatten(n.expr) )
+	elif isinstance( n, CallFunc ):
+		return ( n, sum( [ flatten(m) for m in n.args ] ) + [ flatten(n.node) ] )
 
 
