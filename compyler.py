@@ -97,7 +97,8 @@ main:
 	output.write('''
 	movl $0, %eax # put return value in eax
 	leave
-	ret''')
+	ret
+''')
 
 	
 
