@@ -58,6 +58,16 @@ def flatten(n):
 
 def flatnode_to_asm(n, output):
 	global varoff_dict
+	x86Str = ''
+	if isinstance( n, Assign ):
+		if isinstance( n.expr, CallFunc ):
+			if n.expr.node.name == 'input'
+				x86Str = '\tcall input\n' + '\tmovl %eax, ' + varoff_dict[n.nodes.name] +'(%ebp)'
+			elif 
+		elif isinstance( n.expr, UnarySub ):
+			x86Str = 'movl ' 
+	elif isinstance( n, CallFunc ):
+		
 	return ''
 
 def flattened_to_asm(flattened,output):
