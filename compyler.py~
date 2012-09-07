@@ -58,7 +58,6 @@ for input_file in ns.infile:
 	print 'From'
 	print '\t',tree
 	flattened = flatten(tree)
-	
 	print 'To'
 	for line in flattened:
 		print '\t', line
