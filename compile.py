@@ -66,12 +66,17 @@ def flattened_to_asm(flattened,output):
 	global varname_lst
 	global varoff_dict
 	# Okay, so first we need to set up where variables will be located relative to the ebp(?).
-	offset = -4
+	offset = + 4
 	varname_set = set(varname_lst)
 	for var in varname_set:
-		varoff_dict[var]=offset
-		offset = offset - 4
+		varoff_dict[var]=-offset
+		offset = offset + 4
 	# with that now made, we can call flatnode_to_asm to write the actual output.
+	output.write('''.globl main
+main:
+	pushl %ebp
+	movl %esp, %ebp
+	subl $'''+offset+''', %esp''')
 	for line in flattened:
 		flatnode_to_asm(line,output)
 	

@@ -1,5 +1,7 @@
 #!/usr/bin/python2.7
 
+import os
+import os.path
 import sys
 import argparse
 import compiler
@@ -74,12 +76,17 @@ def flattened_to_asm(flattened,output):
 	global varname_lst
 	global varoff_dict
 	# Okay, so first we need to set up where variables will be located relative to the ebp(?).
-	offset = -4
+	offset = + 4
 	varname_set = set(varname_lst)
 	for var in varname_set:
-		varoff_dict[var]=offset
-		offset = offset - 4
+		varoff_dict[var]=-offset
+		offset = offset + 4
 	# with that now made, we can call flatnode_to_asm to write the actual output.
+	output.write('''.globl main
+main:
+	pushl %ebp
+	movl %esp, %ebp
+	subl $'''+offset+''', %esp''')
 	for line in flattened:
 		flatnode_to_asm(line,output)
 	
@@ -91,9 +98,10 @@ parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=
 argv = sys.argv
 argv.pop(0)
 ns = parser.parse_args(argv)
-
+print ns.infile[0].name
 for input_file in ns.infile:
 	tree = compiler.parse(input_file.read())
+	(input_fname,input_ext) = os.path.splitext(input_file.name)
 	print 'From'
 	print '\t',tree
 	flattened = flatten(tree)
@@ -105,5 +113,8 @@ for input_file in ns.infile:
 	for var in varname_set:
 		print '\t',var
 	
+	outfile = open(input_fname + '.s','w')
+	
+	flattened_to_asm(flattened,outfile)
 
 
