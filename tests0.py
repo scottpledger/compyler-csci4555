@@ -1,3 +1,3 @@
-z = -input()
-a = -input() +4
-print a + - input() + 6
+x = 2
+y = 1
+print x + y

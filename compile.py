@@ -60,7 +60,54 @@ def flatten(n):
 
 def flatnode_to_asm(n, output):
 	global varoff_dict
-	return ''
+	x86Str = ''
+	if isinstance( n, Assign ):
+		if isinstance( n.expr, CallFunc ):#call input instruction
+			if n.expr.node.name == 'input':
+				x86Str = '''
+	call input
+	movl %eax, ''' + str(varoff_dict[n.nodes.name]) +'''(%ebp)'''
+
+		elif isinstance( n.expr, UnarySub ):#negl instruction
+			src = ''
+			if isinstance(n.expr.expr, Name):
+				src = str(varoff_dict[n.expr.expr.name]) + '(%ebp)'
+			elif isinstance(n.expr.expr, Const):
+				src = '$' + str(n.expr.expr.value)
+			
+			x86Str = '''
+	movl ''' + src + ''', %eax
+	negl %eax
+	movl %eax, ''' + str(varoff_dict[n.nodes.name]) +'''(%ebp)'''
+		elif isinstance( n.expr, Name ):#movl instruction
+			x86Str = '''
+	movl ''' + str(varoff_dict[n.expr.name]) + '''(%ebp), ''' + str(varoff_dict[n.nodes.name]) + '''(%ebp)'''
+		elif isinstance( n.expr, Add ):#addl instruciton
+			x86Str = '''
+	movl '''
+			if isinstance( n.expr.left, Name):
+				x86Str += str(varoff_dict[n.expr.left.name]) + '''(%ebp)'''
+			elif isinstance( n.expr.left, Const):
+				x86Str += '''$''' +str(n.expr.left.value) + ''', %eax
+	addl '''
+			if isinstance( n.expr.right, Name):
+				x86Str += str(varoff_dict[n.expr.right.name]) + '''(%ebp)'''
+			elif isinstance( n.expr.right, Const):
+				x86Str += '''$''' + str(n.expr.right.value) + ''', %eax
+	movl %eax, ''' + str(varoff_dict[n.nodes.name]) + '''(%ebp)'''
+	elif isinstance( n, CallFunc ):#print_int_nl instruciton
+		if n.node.name == 'print_int_nl':
+			if isinstance( n.args[0], Name):
+				x86Str += '''
+	pushl ''' + str(varoff_dict[n.args[0].name]) + '''(%ebp)'''
+			elif isinstance( n.args[0], Const):
+				x86Str = '''
+	pushl $''' + n.args[0].value + '''(%ebp)'''
+		x86Str = x86Str + '''
+	call print_int_nl
+	addl $4, %esp'''
+		
+	output.write(x86Str)
 
 def flattened_to_asm(flattened,output):
 	global varname_lst
@@ -72,14 +119,22 @@ def flattened_to_asm(flattened,output):
 		varoff_dict[var]=-offset
 		offset = offset + 4
 	# with that now made, we can call flatnode_to_asm to write the actual output.
-	output.write('''.globl main
+	output.write('''
+.globl main
 main:
 	pushl %ebp
 	movl %esp, %ebp
-	subl $'''+offset+''', %esp''')
+	subl $'''+str(offset)+''', %esp
+''')#preparation
+
 	for line in flattened:
 		flatnode_to_asm(line,output)
-	
+
+	output.write('''
+	movl $0, %eax 
+	leave
+	ret
+''')#clean up
 
 	
 
@@ -88,17 +143,17 @@ parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=
 argv = sys.argv
 argv.pop(0)
 ns = parser.parse_args(argv)
-print ns.infile[0].name
+#print ns.infile[0].name
 for input_file in ns.infile:
 	tree = compiler.parse(input_file.read())
 	(input_fname,input_ext) = os.path.splitext(input_file.name)
-	print 'From'
-	print '\t',tree
+#	print 'From'
+#	print '\t',tree
 	flattened = flatten(tree)
-	print 'To'
+#	print 'To'
 	for line in flattened:
 		print '\t', line
-	print 'Vars'
+#	print 'Vars'
 	varname_set = set(varname_lst)
 	for var in varname_set:
 		print '\t',var
