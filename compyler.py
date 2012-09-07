@@ -64,6 +64,7 @@ def flatnode_to_asm(n, output):
 	if isinstance( n, Assign ):
 		if isinstance( n.expr, CallFunc ):#call input instruction
 			if n.expr.node.name == 'input':
+<<<<<<< HEAD
 				x86Str = x86Str +  '''
 	call input
 	movl %eax, ''' + varoff_dict[n.nodes.name.name] +'''(%ebp)'''
@@ -71,9 +72,19 @@ def flatnode_to_asm(n, output):
 		elif isinstance( n.expr, UnarySub ):#negl instruction
 			x86Str = x86Str +  '''
 	movl ''' + varoff_dict[n.expr.expr.name] + '''(%ebp), %eax
+=======
+				x86Str = '''
+	call input
+	movl %eax, ''' + str(varoff_dict[n.nodes.name]) +'''(%ebp)'''
+
+		elif isinstance( n.expr, UnarySub ):#negl instruction
+			x86Str = '''
+	movl ''' + str(varoff_dict[n.expr.expr.name]) + '''(%ebp), %eax
+>>>>>>> 17f9ea7b778695e8bd0dc0b3fee9d87d4e9b6899
 	negl %eax
-	movl %eax, ''' + varoff_dict[n.nodes.name.name] +'''(%ebp)'''
+	movl %eax, ''' + str(varoff_dict[n.nodes.name]) +'''(%ebp)'''
 		elif isinstance( n.expr, Name ):#movl instruction
+<<<<<<< HEAD
 			x86Str = x86Str +  '''
 	movl ''' + varoff_dict[n.expr.name] + '''(%ebp), ''' + varoff_dict[n.nodes.name.name] + '''(%ebp)'''
 		elif isinstance( n.expr, Add ):#addl instruciton
@@ -96,6 +107,28 @@ def flatnode_to_asm(n, output):
 			if isinstance( n.args[0], Name):
 				x86Str += '''
 	pushl ''' + varoff_dict[n.args[0].name] + '''(%ebp)'''
+=======
+			x86Str = '''
+	movl ''' + str(varoff_dict[n.expr.name]) + '''(%ebp), ''' + str(varoff_dict[n.nodes.name]) + '''(%ebp)'''
+		elif isinstance( n.expr, Add ):#addl instruciton
+			x86Str = '''
+	movl '''
+			if isinstance( n.expr.left, Name):
+				x86Str = x86Str + str(varoff_dict[n.expr.left.name]) + '''(%ebp)'''
+			elif isinstance( n.expr.left, Const):
+				x86Str = x86Str + '''$''' +str(n.expr.left.value) + ''', %eax
+	addl '''
+			if isinstance( n.expr.right, Name):
+				x86Str = x86Str + str(varoff_dict[n.expr.right.name]) + '''(%ebp)'''
+			elif isinstance( n.expr.right, Const):
+				x86Str = x86Str + '''$''' + str(n.expr.right.value) + ''', %eax
+	movl %eax, ''' + str(varoff_dict[n.nodes.name]) + '''(%ebp)'''
+	elif isinstance( n, CallFunc ):#print_int_nl instruciton
+		if n.node.name == 'print_int_nl':
+			if isinstance( n.args[0], Name):
+				x86Str = '''
+	pushl ''' + str(varoff_dict[n.args[0].name]) + '''(%ebp)'''
+>>>>>>> 17f9ea7b778695e8bd0dc0b3fee9d87d4e9b6899
 			elif isinstance( n.args[0], Const):
 				x86Str = '''
 	pushl $''' + n.args[0].value 
@@ -103,7 +136,11 @@ def flatnode_to_asm(n, output):
 	call print_int_nl
 	addl $4, %esp'''
 		
+<<<<<<< HEAD
 	return x86Str
+=======
+	output.write(x86Str)
+>>>>>>> 17f9ea7b778695e8bd0dc0b3fee9d87d4e9b6899
 
 def flattened_to_asm(flattened,output):
 	global varname_lst
@@ -120,13 +157,13 @@ def flattened_to_asm(flattened,output):
 main:
 	pushl %ebp
 	movl %esp, %ebp
-	subl $'''+offset+''', %esp''')#preparation
+	subl $'''+str(offset)+''', %esp''')#preparation
 
 	for line in flattened:
 		flatnode_to_asm(line,output)
 
 	output.write('''
-	movl $0, %eax # put return value in eax
+	movl $0, %eax 
 	leave
 	ret
 ''')#clean up
