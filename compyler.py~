@@ -8,6 +8,7 @@ from compiler.ast import *
 
 temp_var_c = 0
 varname_lst = []
+varoff_dict = dict()
 
 def gen_temp():
 	global temp_var_c
@@ -54,6 +55,23 @@ def flatten(n):
 	elif isinstance( n, Printnl ):
 		nodes_flat = flatten(n.nodes[0])
 		return ( None , nodes_flat[1]+[CallFunc(Name('print_int_nl'),[nodes_flat[0]])])
+
+def flatnode_to_asm(n, output):
+	global varoff_dict
+	return ''
+
+def flattened_to_asm(flattened,output):
+	global varname_lst
+	global varoff_dict
+	# Okay, so first we need to set up where variables will be located relative to the ebp(?).
+	offset = -4
+	varname_set = set(varname_lst)
+	for var in varname_set:
+		varoff_dict[var]=offset
+		offset = offset - 4
+	
+
+	
 
 parser = argparse.ArgumentParser(description='Translates a .py file to x86 assembly language')
 parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=sys.stdin  )
