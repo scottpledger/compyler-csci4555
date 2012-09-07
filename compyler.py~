@@ -18,7 +18,7 @@ def flatten(n):
 	if isinstance(n,Module):
 		return flatten(n.node)
 	elif isinstance(n,Stmt):
-		return [ flatten(m) for m in n.nodes ]
+		return [ flatten(m)[1] for m in n.nodes ]
 	elif isinstance(n,Discard):
 		#This feels really hacky...
 		return flatten(n.expr)
@@ -43,7 +43,8 @@ def flatten(n):
 	elif isinstance( n, Printnl ):
 		print 'Printnl.nodes: ',n.nodes
 		print 'Printnl.dest: ',n.dest
-		#return ( Name('') , 
+		nodes_flat = flatten(n.nodes[0])
+		return ( None , nodes_flat[1]+[CallFunc(Name('print_int'),[nodes_flat[0]])])
 
 parser = argparse.ArgumentParser(description='Translates a .py file to x86 assembly language')
 parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=sys.stdin  )

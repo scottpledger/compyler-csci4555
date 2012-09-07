@@ -18,7 +18,10 @@ def flatten(n):
 	if isinstance(n,Module):
 		return flatten(n.node)
 	elif isinstance(n,Stmt):
-		return [ flatten(m) for m in n.nodes ]
+		stmts = []
+		for m in n.nodes:
+			stmts = stmts + flatten(m)[1]
+		return stmts
 	elif isinstance(n,Discard):
 		#This feels really hacky...
 		return flatten(n.expr)
