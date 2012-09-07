@@ -82,14 +82,20 @@ def flattened_to_asm(flattened,output):
 		varoff_dict[var]=-offset
 		offset = offset + 4
 	# with that now made, we can call flatnode_to_asm to write the actual output.
-	output.write('''.globl main
+	output.write('''
+.globl main
 main:
 	pushl %ebp
 	movl %esp, %ebp
 	subl $'''+offset+''', %esp''')
+
 	for line in flattened:
 		flatnode_to_asm(line,output)
-	
+
+	output.write('''
+	movl $0, %eax # put return value in eax
+	leave
+	ret''')
 
 	
 

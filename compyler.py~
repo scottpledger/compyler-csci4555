@@ -60,21 +60,40 @@ def flatten(n):
 
 def flatnode_to_asm(n, output):
 	global varoff_dict
+	x86Str = ''
+	if isinstance( n, Assign ):
+		if isinstance( n.expr, CallFunc ):
+			if n.expr.node.name == 'input'
+				x86Str = '\tcall input\n' + '\tmovl %eax, ' + varoff_dict[n.nodes.name] +'(%ebp)'
+			elif 
+		elif isinstance( n.expr, UnarySub ):
+			x86Str = 'movl ' 
+	elif isinstance( n, CallFunc ):
+		
 	return ''
 
 def flattened_to_asm(flattened,output):
 	global varname_lst
 	global varoff_dict
 	# Okay, so first we need to set up where variables will be located relative to the ebp(?).
-	offset = -4
+	offset = + 4
 	varname_set = set(varname_lst)
 	for var in varname_set:
-		varoff_dict[var]=offset
-		offset = offset - 4
+		varoff_dict[var]=-offset
+		offset = offset + 4
 	# with that now made, we can call flatnode_to_asm to write the actual output.
+	output.write('''
+.globl main
+main:
+	pushl %ebp
+	movl %esp, %ebp
+	subl $'''+offset+''', %esp''')
 	for line in flattened:
 		flatnode_to_asm(line,output)
-	
+	output.write('''
+	movl $0, %eax # put return value in eax
+	leave
+	ret''')
 
 	
 
