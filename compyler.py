@@ -44,10 +44,8 @@ def flatten(n):
 		expr_flat = flatten(n.expr)
 		return ( Name(t) , expr_flat[1] + [Assign(AssName(t, 'OP_ASSIGN'), UnarySub( expr_flat[0]))])
 	elif isinstance( n, Printnl ):
-		print 'Printnl.nodes: ',n.nodes
-		print 'Printnl.dest: ',n.dest
 		nodes_flat = flatten(n.nodes[0])
-		return ( None , nodes_flat[1]+[CallFunc(Name('print_int'),[nodes_flat[0]])])
+		return ( None , nodes_flat[1]+[CallFunc(Name('print_int_nl'),[nodes_flat[0]])])
 
 parser = argparse.ArgumentParser(description='Translates a .py file to x86 assembly language')
 parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=sys.stdin  )
@@ -58,11 +56,11 @@ ns = parser.parse_args(argv)
 for input_file in ns.infile:
 	tree = compiler.parse(input_file.read())
 	print 'From'
-	print tree
+	print '\t',tree
 	flattened = flatten(tree)
-	
 	print 'To'
-	print flattened
+	for line in flattened:
+		print '\t', line
 	
 
 
