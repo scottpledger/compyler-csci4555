@@ -19,14 +19,23 @@ def flatten(n):
 		return flatten(n.node)
 	elif isinstance(n,Stmt):
 		return [ flatten(m) for m in n.nodes ]
+	elif isinstance(n,Discard):
+		#This feels really hacky...
+		return flatten(n.expr)
+	elif isinstance( n, Assign):
+		expr_flat = flatten(n.expr)
+		return ( Name(n.nodes[0].name) , expr_flat[1] + [Assign(n.nodes[0], expr_flat[0])])
 	elif isinstance( n, Add ):
-		(l,ss1) = flatten(n.left)
-		(r,ss2) = flatten(n.right)
+		( l, ss1 ) = flatten( n.left  )
+		( r, ss2 ) = flatten( n.right )
 		t = gen_temp()
-		ss3 = [Assign(AssName(t,''),Add((l,r)))]
+		ss3 = [ Assign(AssName(t,'OP_ASSIGN'), Add((l,r))) ]
 		return ( Name( t ) , ss1 + ss2 + ss3 )
 	elif isinstance( n, Const ) or isinstance( n, Name ):
 		return ( n, [] )
+	elif isinstance( n, CallFunc ):
+		t = gen_temp()
+		return ( Name( t ), [Assign(AssName(t,'OP_ASSIGN'), n) ] )
 
 parser = argparse.ArgumentParser(description='Translates a .py file to x86 assembly language')
 parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=sys.stdin  )

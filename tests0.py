@@ -1,2 +1,4 @@
-
-print -input() + 2
+x = 2
+y = x
+input()
+z = input()
