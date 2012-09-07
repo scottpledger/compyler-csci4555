@@ -15,6 +15,8 @@ def flatten(n):
 		return flatten(n.node)
 	elif isinstance(n,Stmt):
 		return ( n, [ flatten(m) for m in n.nodes ] )
+	elif isinstance( n, Const ) or isinstance( n, Name ):
+		return ( n, [] )
 	elif isinstance(n,Printnl):
 		args = []
 		flat = []
@@ -23,16 +25,12 @@ def flatten(n):
 			args = args + [name]
 			flat = flat + [(name,flt)] + flt
 		return ( CallFunc(Name('print_int'), args), flat )
-	elif isinstance(n,Assign):
-		return ( n, [ flatten(m) for m in n.nodes ] + [flatten(n.expr)] )
+	elif isinstance( n, Assign ):
+		return ( n.nodes[0], [flatten(n.expr)] )
 	elif isinstance(n,AssName):
 		return ( n, [] )
 	elif isinstance(n, Discard):
 		return flatten(n.expr)
-	elif isinstance( n, Const ):
-		return ( n, [] )
-	elif isinstance(n,Name):
-		return ( n, [] )
 	elif isinstance( n, Add ):
 		(l,ss1) = flatten(n.left)
 		(r,ss2) = flatten(n.right)
@@ -47,7 +45,7 @@ def flatten(n):
 		return ( Name( t ) , ss1 + ss2 + ss3 )
 	elif isinstance( n, UnarySub ):
 		t = gen_temp()
-		return ( Name( t ), [flatten(n.expr)] )
+		return ( Name( t ), [flatten(n.expr)]+[Assign(AssName(t,''),n) ] )
 	elif isinstance( n, CallFunc ):
 		t = gen_temp()
 		return ( Name( t ), [ n ] )
