@@ -1,5 +1,7 @@
 #!/usr/bin/python2.7
 
+import os
+import os.path
 import sys
 import argparse
 import compiler
@@ -81,9 +83,10 @@ parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=
 argv = sys.argv
 argv.pop(0)
 ns = parser.parse_args(argv)
-
+print ns.infile[0].name
 for input_file in ns.infile:
 	tree = compiler.parse(input_file.read())
+	(input_fname,input_ext) = os.path.splitext(input_file.name)
 	print 'From'
 	print '\t',tree
 	flattened = flatten(tree)
@@ -95,5 +98,8 @@ for input_file in ns.infile:
 	for var in varname_set:
 		print '\t',var
 	
+	outfile = open(input_fname + '.s','w')
+	
+	flattened_to_asm(flattened,outfile)
 
 
