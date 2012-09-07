@@ -62,15 +62,36 @@ def flatnode_to_asm(n, output):
 	global varoff_dict
 	x86Str = ''
 	if isinstance( n, Assign ):
-		if isinstance( n.expr, CallFunc ):
+		if isinstance( n.expr, CallFunc ):#call input instruction
 			if n.expr.node.name == 'input'
 				x86Str = '''
 	call input
-	movl %eax, ''' + varoff_dict[n.nodes.name] +'''(%ebp)'''
+	movl %eax, ''' + varoff_dict[n.nodes.name.name] +'''(%ebp)'''
 			elif 
-		elif isinstance( n.expr, UnarySub ):
-			x86Str = 'movl ' 
-	elif isinstance( n, CallFunc ):
+		elif isinstance( n.expr, UnarySub ):#negl instruction
+			x86Str = '''
+	movl ''' + varoff_dict[n.expr.expr.name] + '''(%ebp), %eax
+	negl %eax
+	movl %eax, ''' + varoff_dict[n.nodes.name.name] +'''(%ebp)'''
+		elif isinstance( n.expr, Name ):#movl instruction
+			x86Str = '''
+	movl ''' + varoff_dict[n.expr.name] + '''(%ebp), ''' + varoff_dict[n.nodes.name.name] + '''(%ebp)'''
+		elif isinstance( n.expr, Add ):#addl instruciton
+			x86Str = '''
+	movl ''' + if isinstance( n.expr.left, Name) varoff_dict[n.expr.left.name] + '''(%ebp)''' elif isinstance( n.expr.left, Const) '''$'''str(n.expr.left.value) + ''', %eax
+	addl ''' + if isinstance( n.expr.right, Name) varoff_dict[n.expr.right.name] + '''(%ebp)''' elif isinstance( n.expr.right, Const) '''$'''str(n.expr.right.value) + ''', %eax
+	movl %eax, ''' + varoff_dict[n.nodes.name.name] + '''(%ebp)'''
+	elif isinstance( n, CallFunc ):#print_int_nl instruciton
+		if n.expr.name == 'print_int_nl'
+			if isinstance( n.args[0], Name)
+				x86Str = '''
+	pushl ''' + varoff_dict[n.args[0].name] + '''(%ebp)'''
+			elif isinstance( n.args[0], Const)
+				x86Str = '''
+	pushl $''' + n.args[0].value 
+		x86Str = '''
+	call print_int_nl
+	addl $4, %esp'''
 		
 	return ''
 
@@ -89,7 +110,7 @@ def flattened_to_asm(flattened,output):
 main:
 	pushl %ebp
 	movl %esp, %ebp
-	subl $'''+offset+''', %esp''')
+	subl $'''+offset+''', %esp''')#preparation
 
 	for line in flattened:
 		flatnode_to_asm(line,output)
@@ -98,7 +119,7 @@ main:
 	movl $0, %eax # put return value in eax
 	leave
 	ret
-''')
+''')#clean up
 
 	
 
