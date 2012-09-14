@@ -27,7 +27,7 @@ for input_file in ns.infile:
 	tree = mparser.parser.parse(input_file.read())
 	
 #	print parser.lexer
-#	print tree
+	print tree
 	
 	(input_fname,input_ext) = os.path.splitext(input_file.name)
 #	print 'From'

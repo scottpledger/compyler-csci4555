@@ -4,14 +4,17 @@ import mglobals
 
 #Lexer
 
-tokens   = ('PRINT','INT','PLUS','MINUS','EQUALS','IDENTIFIER','INPUT')
+tokens   = ('PRINT','INT','PLUS','MINUS','EQUALS','IDENTIFIER','INPUT','LPAREN','RPAREN')
 t_PRINT  = r'print'
 t_INPUT  = r'input'
 t_PLUS   = r'\+'
 t_EQUALS = r'='
 t_MINUS  = r'-'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
 
 t_ignore = ' \t'
+t_ignore_COMMENT = r'\#.*'
 
 reserved = {
 	'print':'PRINT',
@@ -99,12 +102,12 @@ def p_expression_add(t):
 	
 
 def p_expression_nested(t):
-	'''expression : "(" expression ")"'''
+	'''expression : LPAREN expression RPAREN'''
 	t[0] = t[2]
 
 
 def p_expression_input(t):
-	'''expression : INPUT "(" ")" '''
+	'''expression : INPUT LPAREN RPAREN '''
 	t[0] = CallFunc(Name('input'),[])
 
 
