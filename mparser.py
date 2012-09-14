@@ -82,7 +82,7 @@ def p_simple_statement(t):
 	elif(len(t)==4):
 		# name EQUALS expression
 		t[0] = Assign([AssName(t[1].name,'OP_ASSIGN')],t[3])
-	elif(len(t)==5):
+	elif(len(t)==2):
 		# expression
 		t[0] = Discard(t[1])
 

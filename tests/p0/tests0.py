@@ -1,5 +1,3 @@
-x = input()
-y = input()
-z = x + y
-print z
+input() + input()
+print input()
 
