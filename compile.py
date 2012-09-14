@@ -14,16 +14,21 @@ import flattener
 
 import assembler
 
+import mparser
 
-
-parser = argparse.ArgumentParser(description='Translates a .py file to x86 assembly language')
-parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=sys.stdin  )
+arg_parser = argparse.ArgumentParser(description='Translates a .py file to x86 assembly language')
+arg_parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=sys.stdin  )
 argv = sys.argv
 argv.pop(0)
-ns = parser.parse_args(argv)
+ns = arg_parser.parse_args(argv)
 
 for input_file in ns.infile:
-	tree = compiler.parse(input_file.read())
+#	tree = compiler.parse(input_file.read())
+	tree = mparser.parser.parse(input_file.read())
+	
+#	print parser.lexer
+	print tree
+	
 	(input_fname,input_ext) = os.path.splitext(input_file.name)
 #	print 'From'
 #	print '\t',tree
