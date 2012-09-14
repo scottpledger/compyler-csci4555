@@ -2,3 +2,5 @@
 *~
 *.zip
 *.pyc
+parser.out
+parsetab.py
