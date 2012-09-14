@@ -4,6 +4,33 @@ import mglobals
 from compiler import *
 from compiler.ast import *
 
+class ASMNode:
+	pass
+
+class ASMCall(ASMNode):
+	__init__(self,node):
+		self.node = node
+
+class ASMMove(ASMNode):
+	__init__(self,src,dest):
+		self.src  = src
+		self.dest = dest
+
+class ASMReg(ASMNode):
+	__init__(self,name):
+		self.name = name
+
+class ASMConst(ASMNode):
+	__init__(self,value):
+		self.value = value
+
+class ASMAdd(ASMNode):
+	__init__(self,src,dest):
+		self.src  = src
+		self.dest = dest
+	
+
+
 def flatnode_to_asm(n, output):
 	x86Str = ''
 	if isinstance( n, Assign ):
