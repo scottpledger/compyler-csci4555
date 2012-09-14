@@ -128,9 +128,6 @@ def flatnode_to_asm(n, output):
 	if isinstance( n, Assign ):
 		if isinstance( n.expr, CallFunc ):#call input instruction
 			if (n.expr.node.name == 'input'):
-				x86Str += '''
-	call input
-	movl %eax, ''' + str(mglobals.varoff_dict[n.nodes.name]) + '''(%ebp)'''
 				asm_nodes += [
 					ASMCall( ASMLabel('input') ),
 					ASMMove( ASMReg('eax'), ASMVar( n.nodes.name, ASMReg('ebp') ) )
@@ -138,10 +135,6 @@ def flatnode_to_asm(n, output):
 
 		elif isinstance( n.expr, UnarySub ):#negl instruction
 			if isinstance( n.expr.expr, Name):#negl var
-				x86Str = x86Str + '''
-	movl ''' + str(mglobals.varoff_dict[n.expr.expr.name]) + '''(%ebp), %eax
-	negl %eax
-	movl %eax, ''' + str(mglobals.varoff_dict[n.nodes.name]) + '''(%ebp)'''
 				asm_nodes += [
 					ASMMove( ASMVar( n.expr.expr.name, ASMReg('ebp') ), ASMReg('eax') ),
 					ASMNeg( ASMReg('eax') ),
@@ -149,10 +142,6 @@ def flatnode_to_asm(n, output):
 				]
 	
 			elif( isinstance( n.expr.expr, Const)):#negl const
-				x86Str += '''
-	movl $''' + str(n.expr.expr.value) + ''', %eax
-	negl %eax
-	movl %eax, ''' + str(mglobals.varoff_dict[n.nodes.name]) + '''(%ebp)'''
 				asm_nodes += [
 					ASMMove( ASMConst( n.expr.expr.value ), ASMReg('eax') ),
 					ASMNeg( ASMReg('eax') ),
@@ -160,17 +149,12 @@ def flatnode_to_asm(n, output):
 				]
 	
 		elif isinstance( n.expr, Name ):#movl var instruction
-			x86Str += '''
-	movl ''' + str(mglobals.varoff_dict[n.expr.name]) + '''(%ebp), %eax
-	movl %eax, ''' + str(mglobals.varoff_dict[n.nodes.name]) + '''(%ebp)'''
 			asm_nodes += [
 				ASMMove( ASMVar( n.expr.name, ASMReg('ebp') ), ASMReg('eax') ),
 				ASMMove( ASMReg('eax'), ASMVar( n.nodes.name, ASMReg('ebp') ) )
 			]
 	
 		elif isinstance( n.expr, Const ):#movl const instruction
-			x86Str += '''
-	movl $''' + str(n.expr.value) + ''', ''' + str(mglobals.varoff_dict[n.nodes.name]) + '''(%ebp)'''
 			asm_nodes += [
 				ASMMove( ASMConst(n.expr.value), ASMVar( n.nodes.name, ASMReg('ebp') ) )
 			]
@@ -179,27 +163,17 @@ def flatnode_to_asm(n, output):
 			lnode = ASMNode()
 			rnode = ASMNode()
 			if isinstance( n.expr.left, Name):
-				x86Str += '''
-	movl ''' + str(mglobals.varoff_dict[n.expr.left.name]) + '''(%ebp), %eax'''
 				lnode = ASMMove( ASMVar( n.expr.left.name, ASMReg('ebp') ), ASMReg('eax') )
 	
 			elif isinstance( n.expr.left, Const):
-				x86Str += '''
-	movl $''' + str(n.expr.left.value) + ''', %eax'''
 				lnode = ASMMove( ASMConst( n.expr.left.value ), ASMReg('eax') )
+				
 			if isinstance( n.expr.right, Name):
-				x86Str += '''
-	movl ''' + str(mglobals.varoff_dict[n.expr.right.name]) + '''(%ebp), %ebx'''
 				rnode = ASMMove( ASMVar( n.expr.right.name, ASMReg('ebp') ), ASMReg('ebx') )
+				
 			elif isinstance( n.expr.right, Const):
-				x86Str += '''
-	movl $''' + str(n.expr.right.value) + ''', %ebx'''
 				rnode = ASMMove( ASMConst( n.expr.right.value ), ASMReg('ebx') )
 			
-			
-			x86Str += '''
-	addl %ebx, %eax
-	movl %eax, ''' + str(mglobals.varoff_dict[n.nodes.name]) + '''(%ebp)'''
 			asm_nodes += [
 				lnode,
 				rnode,
@@ -212,27 +186,20 @@ def flatnode_to_asm(n, output):
 			push_n = ASMConst(0)
 			if isinstance( n.args[0], Name):
 				push_n = ASMVar( n.args[0].name, ASMReg('ebp') )
-				x86Str += '''
-	push ''' + str(mglobals.varoff_dict[n.args[0].name]) + '''(%ebp)'''
+				
 			elif isinstance( n.args[0], Const):
 				push_n = ASMConst( n.args[0].value )
-				x86Str += '''
-	push $''' + str(n.args[0].value)
-			x86Str += '''
-	call print_int_nl
-	addl $4, %esp'''
+
 			asm_nodes += [
 				ASMPush( push_n ),
 				ASMCall( ASMLabel('print_int_nl') ),
 				ASMAdd( ASMConst(4), ASMReg('esp') )
 			]
 	
-	output.write(x86Str)
-	
 	return asm_nodes
 
 def flattened_to_asm(flattened,output):
-	# Okay, so first we need to set up where variables will be located relative to the ebp(?).
+	# Okay, so first we need to set up where variables will be located relative to the ebp.
 	offset = + 4
 	mglobals.varname_set = set(mglobals.varname_lst)
 	for var in mglobals.varname_set:
@@ -240,26 +207,12 @@ def flattened_to_asm(flattened,output):
 		offset = offset + 4
 	# with that now made, we can call flatnode_to_asm to write the actual output.
 	
-	output.write('''
-.globl main
-main:
-	pushl %ebp
-	movl %esp, %ebp
-	subl $'''+str(offset)+''', %esp
-''')#preparation
 	func_nodes = [
 		ASMSub( ASMConst(str(offset)), ASMReg('esp') )
 	]
+	
 	for line in flattened:
 		func_nodes += flatnode_to_asm(line,output)
-	
-	output.write('''
-	movl $0, %eax 
-	leave
-	ret
-
-# testing new ASM tree method...
-''')#clean up
 	
 	asm_file = ASMFile([
 		ASMGlobl( ASMLabel('main') ),
