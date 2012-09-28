@@ -3,8 +3,10 @@ import mglobals
 from compiler import *
 from compiler.ast import *
 from flattener import TempName
+from flattener import VarName
 from asmnodes import *
 import heapq
+import flattener
 
 class PriorityQueue:
 	def  __init__(self):  
@@ -65,14 +67,16 @@ class InterferenceGraph:
 			self.add_edge(node1,node2)
 	
 	def get_saturation(self, node):
-		if self.reg_assign[node] == None:
+		if isinstance(node, VarName) and node.vtype =='reg_temp':
+			return 9999999999999999999999999999999999
+		if self.reg_assign[node]:
 			saturation = 0
 			for child in self.dict[node]:
 				if not self.reg_assign[child] == None:
 					saturation += 1
 			return saturation
 		else:
-			return 9999999999999999999999999999999999
+			return 99999999999999
 	
 	def assign_locations(self):
 		queue = PriorityQueue()
@@ -118,6 +122,9 @@ class RegisterAllocator:
 		n=len(out_list)
 		self.live_variables = list([set([]) for i in range(0,n+1)])
 		while self.changed:
+			print "Iteration"
+			n=len(out_list)
+			self.live_variables = self.live_variables + list([set([]) for i in range(len(self.live_variables),n+1)])
 			self.changed=False
 			out_list = self.analyse_liveness(out_list)
 			self.build_interference_graph(out_list)
@@ -242,7 +249,12 @@ class RegisterAllocator:
 					else:
 						out_list.append(ASMMove(ASMVar(temp_var),n.right))
 					self.changed=True
+			elif isinstance(n,ASMMove) and isinstance(n.left,ASMVar) and isinstance(n.right,ASMVar) and n.left.name == n.right.name:
+				print "Move to self"
+				self.changed=True
+				pass
 			else:
+				print "Valid node: "+repr(n)
 				out_list.append(n)
 				
 					
