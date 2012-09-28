@@ -17,11 +17,9 @@ class RegisterAllocator:
 			self.changed=False
 			n=len(asm_list)
 			self.live_variables = list([set([]) for i in range(0,n+1)])
-			new_list = []
-			k=0
 			out_list = self.analyse_liveness(out_list)
 		
-		for x in range(0,max(len(self.live_variables),len(asm_list))):
+		for x in range(0,max(len(self.live_variables),len(out_list))):
 			left = None
 			right = None
 			if x<len(asm_list):
