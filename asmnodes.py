@@ -106,6 +106,18 @@ class ASMVar(ASMNode):
 		
 		print "ERROR!!! Could not convert %r to a string!" % (self)
 		return str(self.name)
+	#def __eq__(self,other):
+	#	if isinstance(other,ASMVar):
+	#		if self.loc == None or other.loc==None:
+	#			return self.name == other.name
+	#		else:
+	#			return self.name == other.name or self.loc == other.loc
+	#	elif isinstance(other,VarName):
+	#		return self.name == other
+	#	else:
+	#		return False
+	#def __hash__( self ):
+	#	return hash(self.name) ^ hash(self.loc)
 
 class ASMConst(ASMNode):
 	def __init__(self,value):

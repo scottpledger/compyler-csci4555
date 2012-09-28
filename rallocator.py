@@ -76,7 +76,7 @@ class InterferenceGraph:
 					saturation += 1
 			return saturation
 		else:
-			return 99999999999999
+			return 99999999999999999
 	
 	def assign_locations(self):
 		queue = PriorityQueue()
@@ -129,6 +129,20 @@ class RegisterAllocator:
 			out_list = self.analyse_liveness(out_list)
 			self.build_interference_graph(out_list)
 			self.int_graph.assign_locations()
+			
+			for n in out_list:
+				print "Node: "+repr(n)
+			#if False:
+				if isinstance(n,ASMAdd) or isinstance(n,ASMMove):
+					#print "Node: "+repr(n)
+					if isinstance(n.left,ASMVar):
+						n.left.loc = self.int_graph.reg_assign[n.left.name]
+					if isinstance(n.right,ASMVar):
+						n.right.loc = self.int_graph.reg_assign[n.right.name]
+				elif isinstance(n,ASMNeg) or isinstance(n,ASMPush):
+					if isinstance(n.node,ASMVar):
+						n.node.loc = self.int_graph.reg_assign[n.node.name]
+			
 			out_list = self.verify_assignments(out_list)
 			#self.changed=False
 			
@@ -189,6 +203,7 @@ class RegisterAllocator:
 					W_v.add(instr.right.name)
 					
 			elif isinstance(instr, ASMNeg):
+				print "FOUND NEG "+repr(instr)
 				if isinstance(instr.node, ASMVar):
 					W_v.add(instr.node.name)
 					R_v.add(instr.node.name)
@@ -234,6 +249,7 @@ class RegisterAllocator:
 					self.int_graph.add_edges(x,call_save_regs)
 
 	def verify_assignments(self, asm_list):
+		return asm_list
 		out_list = []
 		for n in asm_list:
 			if (
@@ -249,10 +265,10 @@ class RegisterAllocator:
 					else:
 						out_list.append(ASMMove(ASMVar(temp_var),n.right))
 					self.changed=True
-			elif isinstance(n,ASMMove) and isinstance(n.left,ASMVar) and isinstance(n.right,ASMVar) and n.left.name == n.right.name:
+			elif isinstance(n,ASMMove) and isinstance(n.left,ASMVar) and isinstance(n.right,ASMVar) and (n.left.name == n.right.name or ( not n.left.loc == None and not n.right.loc == None and n.right.loc==n.left.loc )):
 				print "Move to self"
 				self.changed=True
-				pass
+
 			else:
 				print "Valid node: "+repr(n)
 				out_list.append(n)

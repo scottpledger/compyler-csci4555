@@ -25,7 +25,7 @@ def flatnode_to_asm(n):
 
 		elif isinstance( n.expr, UnarySub ):#negl instruction
 			
-			if isinstance( n.expr.expr, VarName) and n.expr.expr.vtype=='user':#negl var
+			if isinstance( n.expr.expr, VarName):# and n.expr.expr.vtype=='user':#negl var
 				if n.expr.expr == n.nodes:
 					asm_nodes += [
 						ASMNeg( ASMVar(n.expr.expr) )
@@ -143,18 +143,18 @@ def flattened_to_asm(flattened):
 	while i < len(flattened)-1:
 		#Let's do a bit of clean up here, before converting it to asm...
 		line = flattened[i]
-		n_line = flattened[i+1]
-		if isinstance(line, Assign) and isinstance(n_line,Assign) and n_line.expr == line.nodes:
-			n_line.expr = line.expr
-			line = n_line
-			i+=1
+		#n_line = flattened[i+1]
+		#if isinstance(line, Assign) and isinstance(n_line,Assign) and n_line.expr == line.nodes:
+		#	n_line.expr = line.expr
+		#	line = n_line
+		#	i+=1
 		func_nodes += flatnode_to_asm(line)
 		i+=1
 	
 	ralloc.allocate_registers(func_nodes)
 	
 	func_nodes = [
-		ASMSub( ASMConst(str(-4*(1+len(ralloc.int_graph.avail_stacks)))), ASMReg('esp') )
+		ASMSub( ASMConst(str(4*(len(ralloc.int_graph.avail_stacks)))), ASMReg('esp') )
 	] + func_nodes
 	
 	asm_file = ASMFile([
