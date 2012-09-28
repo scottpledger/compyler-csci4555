@@ -99,6 +99,7 @@ def flatnode_to_asm(n):
 
 				
 	elif isinstance( n, CallFunc ):#print_int_nl instruciton
+		print "CallFunc found!: ",n
 		if (n.node.name == 'print_int_nl'):
 			push_n = ASMConst(0)
 			if isinstance( n.args[0], VarName):
@@ -134,10 +135,22 @@ def flattened_to_asm(flattened):
 		#ASMSub( ASMConst(str(offset)), ASMReg('esp') )
 	]
 	
-	for line in flattened:
-		func_nodes += flatnode_to_asm(line)
+	flattened.append(Node())
 	
-	ralloc.analyse_liveness(func_nodes)
+	
+	i=0
+	while i < len(flattened)-2:
+		#Let's do a bit of clean up here, before converting it to asm...
+		line = flattened[i]
+		n_line = flattened[i+1]
+		if isinstance(line, Assign) and isinstance(n_line,Assign) and n_line.expr == line.nodes:
+			n_line.expr = line.expr
+			line = n_line
+			i+=1
+		func_nodes += flatnode_to_asm(line)
+		i+=1
+	
+	ralloc.allocate_registers(func_nodes)
 	
 	asm_file = ASMFile([
 		ASMGlobl( ASMLabel('main') ),
