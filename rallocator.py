@@ -38,6 +38,8 @@ class InterferenceGraph:
 	def add_node(self, node):
 		if node not in self.dict:
 			self.dict[node] = set([])
+		if node not in self.reg_assign:
+			self.reg_assign[node] = None
 		
 	def add_edge(self, node1, node2):
 		if not node1 == node2:
@@ -75,7 +77,6 @@ class InterferenceGraph:
 	def assign_locations(self):
 		queue = PriorityQueue()
 		for node in self.dict:
-			
 			queue.push(node,self.get_saturation(node))
 		
 		while not queue.is_empty():
@@ -134,7 +135,7 @@ class RegisterAllocator:
 		#	if x<len(self.live_variables):
 		#		right = self.live_variables[x]
 		#	print "%r => %r"%(right,left)
-		#
+		
 		#print "Graph Edges: "
 		#for key in self.int_graph.dict.iterkeys():
 		#	print "%r => %r"%(key,self.int_graph.dict[key])
@@ -144,7 +145,9 @@ class RegisterAllocator:
 		#	print "%r => %r"%(key,self.int_graph.reg_assign[key])
 		
 		for n in out_list:
+		#if False:
 			if isinstance(n,ASMAdd) or isinstance(n,ASMMove):
+				#print "Node: "+repr(n)
 				if isinstance(n.left,ASMVar):
 					n.left.loc = self.int_graph.reg_assign[n.left.name]
 				if isinstance(n.right,ASMVar):
@@ -194,6 +197,9 @@ class RegisterAllocator:
 			if not self.live_variables[len(stack)] == L_before:
 				self.changed=True
 				self.live_variables[len(stack)] = L_before
+				
+			for n in R_v | W_v:
+				self.int_graph.add_node(n)
 			
 		return out_list
 		
