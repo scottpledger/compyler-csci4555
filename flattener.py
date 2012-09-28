@@ -18,9 +18,34 @@ class TempName(Node):
 	def __repr__(self):
 		return "TempName(%s)" % (repr(self.name),)
 
+class VarName(Node):
+	def __init__(self, name, vtype, lineno=None):
+		self.name = name
+		self.vtype = vtype
+		self.lineno = lineno
+
+	def getChildren(self):
+		return self.name,
+
+	def getChildNodes(self):
+		return ()
+	
+	def __eq__(self, other):
+		if isinstance(other,VarName):
+			return self.name == other.name and self.vtype == other.vtype
+		else:
+			return False
+	
+	def __hash__(self):
+		return hash(self.name) ^ hash(self.vtype)
+
+	def __repr__(self):
+		return "VarName(%s,%s)" % (repr(self.name),self.vtype)
+
+
 def gen_temp():
 
-	tmp = TempName('t'+str(mglobals.temp_var_c))
+	tmp = VarName('t'+str(mglobals.temp_var_c),'temp')
 	mglobals.temp_var_c = mglobals.temp_var_c + 1
 	mglobals.varname_lst = mglobals.varname_lst + [tmp]
 	return tmp
@@ -37,9 +62,9 @@ def flatten(n):
 		return flatten(n.expr)
 	elif isinstance( n, Assign):
 		expr_flat = flatten(n.expr)
-		n_node = Name(n.nodes[0].name)
+		n_node = VarName(n.nodes[0].name,'user')
 		mglobals.varname_lst = mglobals.varname_lst + [n_node]
-		return ( Name(n.nodes[0].name) , expr_flat[1] + [Assign(n_node, expr_flat[0])])
+		return ( VarName(n.nodes[0].name,'user') , expr_flat[1] + [Assign(n_node, expr_flat[0])])
 	elif isinstance( n, Add ):
 		( l, ss1 ) = flatten( n.left  )
 		( r, ss2 ) = flatten( n.right )
@@ -50,7 +75,7 @@ def flatten(n):
 		return ( n, [] )
 	elif isinstance( n, Name ):
 		mglobals.varname_lst = mglobals.varname_lst + [n]
-		return ( n, [] )
+		return ( VarName(n.name,'user'), [] )
 	elif isinstance( n, CallFunc ):
 		t = gen_temp()
 		return ( t , [Assign(t, n) ] )

@@ -45,6 +45,10 @@ for input_file in ns.infile:
 	
 	outfile = open(input_fname + '.s','w')
 	
-	assembler.flattened_to_asm(flattened,outfile)
+	asm_file = assembler.flattened_to_asm(flattened)
+	
+	print repr(asm_file)
+	
+	outfile.write(str(asm_file))
 
 
