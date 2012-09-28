@@ -3,6 +3,7 @@
 import mglobals
 from compiler import *
 from compiler.ast import *
+import flattener
 from flattener import TempName
 from flattener import VarName
 from rallocator import RegisterAllocator
@@ -11,8 +12,8 @@ from asmnodes import *
 
 
 def flatnode_to_asm(n):
-	asm_nodes = [ASMNode(),ASMComment('from '+str(n))]
-	#asm_nodes = []
+	#asm_nodes = [ASMNode(),ASMComment('from '+str(n))]
+	asm_nodes = []
 	x86Str = ''
 	if isinstance( n, Assign ):
 		if isinstance( n.expr, CallFunc ):#call input instruction
@@ -99,7 +100,7 @@ def flatnode_to_asm(n):
 
 				
 	elif isinstance( n, CallFunc ):#print_int_nl instruciton
-		print "CallFunc found!: ",n
+		
 		if (n.node.name == 'print_int_nl'):
 			push_n = ASMConst(0)
 			if isinstance( n.args[0], VarName):
@@ -139,7 +140,7 @@ def flattened_to_asm(flattened):
 	
 	
 	i=0
-	while i < len(flattened)-2:
+	while i < len(flattened)-1:
 		#Let's do a bit of clean up here, before converting it to asm...
 		line = flattened[i]
 		n_line = flattened[i+1]
@@ -151,6 +152,10 @@ def flattened_to_asm(flattened):
 		i+=1
 	
 	ralloc.allocate_registers(func_nodes)
+	
+	func_nodes = [
+		ASMSub( ASMConst(str(-4*(1+len(ralloc.int_graph.avail_stacks)))), ASMReg('esp') )
+	] + func_nodes
 	
 	asm_file = ASMFile([
 		ASMGlobl( ASMLabel('main') ),

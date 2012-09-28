@@ -47,7 +47,7 @@ for input_file in ns.infile:
 	
 	asm_file = assembler.flattened_to_asm(flattened)
 	
-	print repr(asm_file)
+	#print repr(asm_file)
 	
 	outfile.write(str(asm_file))
 

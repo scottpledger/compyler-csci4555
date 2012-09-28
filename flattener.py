@@ -43,9 +43,9 @@ class VarName(Node):
 		return "VarName(%s,%s)" % (repr(self.name),self.vtype)
 
 
-def gen_temp():
+def gen_temp(ntype='temp'):
 
-	tmp = VarName('t'+str(mglobals.temp_var_c),'temp')
+	tmp = VarName('t'+str(mglobals.temp_var_c),ntype)
 	mglobals.temp_var_c = mglobals.temp_var_c + 1
 	mglobals.varname_lst = mglobals.varname_lst + [tmp]
 	return tmp
@@ -59,7 +59,8 @@ def flatten(n):
 			stmts = stmts + flatten(m)[1]
 		return stmts
 	elif isinstance(n,Discard):
-		return flatten(n.expr)
+		output = flatten(n.expr)
+		return output
 	elif isinstance( n, Assign):
 		expr_flat = flatten(n.expr)
 		n_node = VarName(n.nodes[0].name,'user')
@@ -85,6 +86,7 @@ def flatten(n):
 		return ( t , expr_flat[1] + [Assign(t, UnarySub( expr_flat[0]))])
 	elif isinstance( n, Printnl ):
 		nodes_flat = flatten(n.nodes[0])
-		return ( None , nodes_flat[1]+[CallFunc(Name('print_int_nl'),[nodes_flat[0]])])
+		retval = ( None , nodes_flat[1]+[CallFunc(Name('print_int_nl'),[nodes_flat[0]])])
+		return retval
 
 
