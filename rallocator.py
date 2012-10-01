@@ -9,11 +9,12 @@ import heapq
 import flattener
 
 class PriorityQueue:
-	def  __init__(self):  
+	def  __init__(self,pfunc):  
 		self.heap = []
+		self.pfunc = pfunc
 
-	def push(self, item, priority):
-		pair = (priority,item)
+	def push(self, item):
+		pair = (self.pfunc(item),item)
 		heapq.heappush(self.heap,pair)
 
 	def pop_min(self):
@@ -25,6 +26,12 @@ class PriorityQueue:
 		(priority,item) = vals[0]
 		self.heap.remove((priority,item))
 		return item
+	
+	def update(self):
+		oldheap = self.heap
+		self.heap = []
+		for p,n in oldheap:
+			self.push(n)
 
 	def is_empty(self):
 		return len(self.heap) == 0
@@ -36,6 +43,7 @@ class InterferenceGraph:
 		self.reg_assign = {}
 		self.avail_regs = set([ASMReg('eax'),ASMReg('ebx'),ASMReg('ecx'),ASMReg('edx'),ASMReg('edi'),ASMReg('esi')])
 		self.avail_stacks = set([])
+		self.changed = True
 	
 	def add_node(self, node):
 		if node not in self.dict:
@@ -69,7 +77,7 @@ class InterferenceGraph:
 	def get_saturation(self, node):
 		if isinstance(node, VarName) and node.vtype =='reg_temp':
 			return 9999999999999999999999999999999999
-		if self.reg_assign[node]:
+		elif self.reg_assign[node]:
 			saturation = 0
 			for child in self.dict[node]:
 				if not self.reg_assign[child] == None:
@@ -79,34 +87,39 @@ class InterferenceGraph:
 			return 99999999999999999
 	
 	def assign_locations(self):
-		queue = PriorityQueue()
+		self.reg_assign = {}
+		queue = PriorityQueue(self.get_saturation)
 		for node in self.dict:
-			queue.push(node,self.get_saturation(node))
+			self.reg_assign[node] = None
+			queue.push(node)
 		
 		while not queue.is_empty():
 			node = queue.pop_max()
 			m_regs = set(self.avail_regs)
 			m_stacks= set(self.avail_stacks)
 			for child in self.dict[node]:
-				#print "checking child "+repr(child)+" against "+repr(self.reg_assign)
 				if child in self.reg_assign and not self.reg_assign[child] == None:
 					color = self.reg_assign[child]
 					if isinstance(color,ASMReg):
 						m_regs = m_regs - set([color])
 					else:
 						m_stacks = m_stacks - set([color])
-			
+			newval = None
 			if len(m_regs)>0:
-				self.reg_assign[node] = m_regs.pop()
-				self.changed = True
+				newval = m_regs.pop()
+				
 			elif len(m_stacks)>0:
-				self.reg_assign[node] = m_stacks.pop()
-				self.changed = True
+				newval = m_stacks.pop()
+				
 			else:
-				new_stack = ASMStack(ASMReg('ebp'),-4*(1+len(self.avail_stacks)))
-				self.avail_stacks.add(new_stack)
-				self.reg_assign[node] = new_stack
+				newval = ASMStack(ASMReg('ebp'),-4*(1+len(self.avail_stacks)))
+				self.avail_stacks.add(newval)
+				
+			if not self.reg_assign[node] == newval:
+				self.reg_assign[node] = newval
 				self.changed = True
+			# Now we need to update our priority queue!
+			queue.update()
 			
 	
 	
@@ -118,57 +131,111 @@ class RegisterAllocator:
 		self.int_graph = InterferenceGraph()
 		
 	def allocate_registers(self,asm_list):
-		out_list = asm_list
+		out_list = list(asm_list)
 		n=len(out_list)
 		self.live_variables = list([set([]) for i in range(0,n+1)])
+		prev_list = list()
+		allocated = False
+		self.changed = True
+		passnum = 0
 		while self.changed:
-			print "Iteration"
+			
+			self.changed = False
+			prev_list = list(out_list)
+		
+			#print "Iteration %s" % passnum
+			
 			n=len(out_list)
 			self.live_variables = self.live_variables + list([set([]) for i in range(len(self.live_variables),n+1)])
-			self.changed=False
-			out_list = self.analyse_liveness(out_list)
-			self.build_interference_graph(out_list)
-			self.int_graph.assign_locations()
 			
+			out_list = self.analyse_liveness(out_list)
+			# For debugging, let's write out the live analysis results...
+			ofile = open('tmp/rallocator/pass'+str(passnum)+'.live_vars','w')
+			for j in range(0,len(self.live_variables)):
+				ofile.write("%r\n"%self.live_variables[j])
+				if j < len(out_list):
+					ofile.write("\t%r\n"%out_list[j])
+			
+			self.build_interference_graph(out_list)
+			# For debugging, let's write out the interference graph...
+			ofile = open('tmp/rallocator/pass'+str(passnum)+'.int_graph','w')
+			for i in self.int_graph.dict.iterkeys():
+				ofile.write( "%r\n"%i )
+				for j in self.int_graph.dict[i]:
+					ofile.write( "\t=> %r\n"%(j) )
+			
+			
+			self.int_graph.assign_locations()
+			out_list = self.verify_assignments(out_list)
+			
+			new_list = []
+			allocated = True
 			for n in out_list:
-				print "Node: "+repr(n)
-			#if False:
+				append = True
 				if isinstance(n,ASMAdd) or isinstance(n,ASMMove):
-					#print "Node: "+repr(n)
 					if isinstance(n.left,ASMVar):
-						n.left.loc = self.int_graph.reg_assign[n.left.name]
+						try:
+							n.left.loc = self.int_graph.reg_assign[n.left.name]
+						except KeyError:
+							allocated = False
 					if isinstance(n.right,ASMVar):
-						n.right.loc = self.int_graph.reg_assign[n.right.name]
+						try:
+							n.right.loc = self.int_graph.reg_assign[n.right.name]
+						except KeyError:
+							allocated = False
+					
+					
 				elif isinstance(n,ASMNeg) or isinstance(n,ASMPush):
 					if isinstance(n.node,ASMVar):
-						n.node.loc = self.int_graph.reg_assign[n.node.name]
+						try:
+							n.node.loc = self.int_graph.reg_assign[n.node.name]
+						except KeyError:
+							allocated = False
 			
-			out_list = self.verify_assignments(out_list)
-			#self.changed=False
+				if append:
+					new_list.append(n)
+			out_list = list(new_list)
 			
-		
-		#print "Live variable sets:"
-		#for x in range(0,max(len(self.live_variables),len(out_list))):
-		#	left = None
-		#	right = None
-		#	if x<len(asm_list):
-		#		left = asm_list[x]
-		#	if x<len(self.live_variables):
-		#		right = self.live_variables[x]
-		#	print "%r => %r"%(right,left)
-		
-		#print "Graph Edges: "
-		#for key in self.int_graph.dict.iterkeys():
-		#	print "%r => %r"%(key,self.int_graph.dict[key])
-		
-		#print "Graph assigns:"
-		#for key in self.int_graph.reg_assign:
-		#	print "%r => %r"%(key,self.int_graph.reg_assign[key])
+			
+			if False:
+				new_list = []
+				ofile = open('tmp/rallocator/pass'+str(passnum)+'.rem_dupes','w')
+				for n in out_list:
+					append = True
+					if isinstance(n,ASMMove):
+						ofile.write("Checking: %r\n"%n)
+						lloc = ""
+						rloc = ""
+						if isinstance(n.left,ASMVar):
+							lloc = n.left.loc
+						elif isinstance(n.left,ASMReg):
+							lloc = n.left
+					
+						if isinstance(n.right,ASMVar):
+							rloc = n.right.loc
+						elif isinstance(n.right,ASMReg):
+							rloc = n.right
+					
+						if str(lloc)==str(rloc):
+							append = False
+							self.changed = True
+						ofile.write( "to see if %s == %s , which is %r\n"%(lloc,rloc,not append) )
+					
+					if append:
+						new_list.append(n)
+				
+				out_list = list(new_list)
+					
+			
+			ofile = open('tmp/rallocator/pass'+str(passnum)+'.asm_list','w')
+			passnum += 1
+			for n in out_list:
+				ofile.write("%r\n"%n)
+			
+			
 		
 		for n in out_list:
-		#if False:
 			if isinstance(n,ASMAdd) or isinstance(n,ASMMove):
-				#print "Node: "+repr(n)
 				if isinstance(n.left,ASMVar):
 					n.left.loc = self.int_graph.reg_assign[n.left.name]
 				if isinstance(n.right,ASMVar):
@@ -203,7 +270,6 @@ class RegisterAllocator:
 					W_v.add(instr.right.name)
 					
 			elif isinstance(instr, ASMNeg):
-				print "FOUND NEG "+repr(instr)
 				if isinstance(instr.node, ASMVar):
 					W_v.add(instr.node.name)
 					R_v.add(instr.node.name)
@@ -249,11 +315,11 @@ class RegisterAllocator:
 					self.int_graph.add_edges(x,call_save_regs)
 
 	def verify_assignments(self, asm_list):
-		return asm_list
+		#return asm_list
 		out_list = []
 		for n in asm_list:
 			if (
-				(isinstance(n, ASMAdd) or isinstance(n, ASMMove)) and 
+				( isinstance(n, ASMAdd) or isinstance(n, ASMMove) ) and 
 				isinstance(n.left, ASMVar) and isinstance(n.right, ASMVar) and 
 				isinstance(self.int_graph.reg_assign[n.left.name],ASMStack) and 
 				isinstance(self.int_graph.reg_assign[n.right.name],ASMStack)
@@ -265,12 +331,27 @@ class RegisterAllocator:
 					else:
 						out_list.append(ASMMove(ASMVar(temp_var),n.right))
 					self.changed=True
-			elif isinstance(n,ASMMove) and isinstance(n.left,ASMVar) and isinstance(n.right,ASMVar) and (n.left.name == n.right.name or ( not n.left.loc == None and not n.right.loc == None and n.right.loc==n.left.loc )):
-				print "Move to self"
-				self.changed=True
+			elif isinstance(n,ASMMove) and False:
+				lloc = ""
+				rloc = ""
+				if isinstance(n.left,ASMVar):
+					lloc = n.left.loc
+				elif isinstance(n.left,ASMReg):
+					lloc = n.left
+			
+				if isinstance(n.right,ASMVar):
+					rloc = n.right.loc
+				elif isinstance(n.right,ASMReg):
+					rloc = n.right
+			
+				if str(lloc)==str(rloc):
+					self.changed = True
+				else:
+					out_list.append(n)
+			
 
 			else:
-				print "Valid node: "+repr(n)
+				#print "Valid node: "+repr(n)
 				out_list.append(n)
 				
 					

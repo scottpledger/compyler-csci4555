@@ -34,9 +34,9 @@ for input_file in ns.infile:
 #	print '\t',tree
 	flattened = flattener.flatten(tree)
 #	print flattened
-	print 'To'
-	for line in flattened:
-		print '\t', line
+#	print 'To'
+#	for line in flattened:
+#		print '\t', line
 #	print 'Vars'
 #	mglobals.varname_set = set(mglobals.varname_lst)
 #	mglobals.tvarname_set= set(mglobals.tvarname_lst)
