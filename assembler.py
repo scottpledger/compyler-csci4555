@@ -110,9 +110,10 @@ def flatnode_to_asm(n):
 				push_n = ASMConst( n.args[0].value )
 
 			asm_nodes += [
+				ASMSub( ASMConst(12), ASMReg('esp')),
 				ASMPush( push_n ),
 				ASMCall( ASMLabel('print_int_nl') ),
-				ASMAdd( ASMConst(4), ASMReg('esp') )
+				ASMAdd( ASMConst(16), ASMReg('esp') )
 			]
 	
 	return asm_nodes
@@ -167,7 +168,7 @@ def flattened_to_asm(flattened):
 	
 	
 	func_nodes = [
-		ASMSub( ASMConst(str(4*(len(ralloc.int_graph.avail_stacks)))), ASMReg('esp') )
+		ASMSub( ASMConst(str(4*(1+len(ralloc.int_graph.avail_stacks)))), ASMReg('esp') )
 	] + func_nodes
 	
 	asm_file = ASMFile([

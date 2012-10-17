@@ -3,90 +3,63 @@
 import mglobals
 from compiler import *
 from compiler.ast import *
-
-class TempName(Node):
-	def __init__(self, name, lineno=None):
-		self.name = name
-		self.lineno = lineno
-
-	def getChildren(self):
-		return self.name,
-
-	def getChildNodes(self):
-		return ()
-
-	def __repr__(self):
-		return "TempName(%s)" % (repr(self.name),)
-
-class VarName(Node):
-	def __init__(self, name, vtype, lineno=None):
-		self.name = name
-		self.vtype = vtype
-		self.lineno = lineno
-
-	def getChildren(self):
-		return self.name,
-
-	def getChildNodes(self):
-		return ()
-	
-	def __eq__(self, other):
-		if isinstance(other,VarName):
-			return self.name == other.name and self.vtype == other.vtype
-		else:
-			return False
-	
-	def __hash__(self):
-		return hash(self.name) ^ hash(self.vtype)
-
-	def __repr__(self):
-		return "VarName(%s,%s)" % (repr(self.name),self.vtype)
+from asmnodes import VarName
+from node_handler import Handler
 
 
 def gen_temp(ntype='temp'):
-
 	tmp = VarName('t'+str(mglobals.temp_var_c),ntype)
 	mglobals.temp_var_c = mglobals.temp_var_c + 1
 	mglobals.varname_lst = mglobals.varname_lst + [tmp]
 	return tmp
 
-def flatten(n):
-	if isinstance(n,Module):
-		return flatten(n.node)
-	elif isinstance(n,Stmt):
+class FlattenHandler(Handler):
+
+	def handleModule(self,n):
+		return Module(n.doc,self.handle(n.node))
+		
+	def handleStmt(self,n):
 		stmts = []
 		for m in n.nodes:
-			stmts = stmts + flatten(m)[1]
-		return stmts
-	elif isinstance(n,Discard):
-		output = flatten(n.expr)
+			stmts = stmts + self.handle(m)[1]
+		return Stmt(stmts)
+	
+	def handleDiscard(self,n):
+		output = self.handle(n.expr)
 		return output
-	elif isinstance( n, Assign):
-		expr_flat = flatten(n.expr)
+		
+	def handleAssign(self,n):
+		expr_flat = self.handle(n.expr)
 		n_node = VarName(n.nodes[0].name,'user')
 		mglobals.varname_lst = mglobals.varname_lst + [n_node]
 		return ( VarName(n.nodes[0].name,'user') , expr_flat[1] + [Assign(n_node, expr_flat[0])])
-	elif isinstance( n, Add ):
-		( l, ss1 ) = flatten( n.left  )
-		( r, ss2 ) = flatten( n.right )
+		
+	def handleAdd(self,n):
+		( l, ss1 ) = self.handle( n.left  )
+		( r, ss2 ) = self.handle( n.right )
 		t = gen_temp()
 		ss3 = [ Assign(t, Add((l,r))) ]
 		return ( t , ss1 + ss2 + ss3 )
-	elif isinstance( n, Const ):
+	
+	def handleConst(self,n):
 		return ( n, [] )
-	elif isinstance( n, Name ):
+	
+	def handleName(self,n):
 		mglobals.varname_lst = mglobals.varname_lst + [n]
 		return ( VarName(n.name,'user'), [] )
-	elif isinstance( n, CallFunc ):
+		
+	def handleCallFunc(self,n):
 		t = gen_temp()
 		return ( t , [Assign(t, n) ] )
-	elif isinstance( n, UnarySub ):
+		
+	def handleUnarySub(self,n):
 		t = gen_temp()
-		expr_flat = flatten(n.expr)
+		expr_flat = self.handle(n.expr)
 		return ( t , expr_flat[1] + [Assign(t, UnarySub( expr_flat[0]))])
-	elif isinstance( n, Printnl ):
-		nodes_flat = flatten(n.nodes[0])
-		retval = ( None , nodes_flat[1]+[CallFunc(Name('print_int_nl'),[nodes_flat[0]])])
+		
+	def handlePrintnl(self,n):
+		nodes_flat = self.handle(n.nodes[0])
+		retval = ( None , nodes_flat[1]+[Printnl([nodes_flat[0]],n.dest)] )
 		return retval
 
 

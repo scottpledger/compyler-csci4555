@@ -6,49 +6,39 @@ import sys
 import argparse
 import compiler
 import compiler.ast
+import pprint
 from compiler.ast import *
 
-import mglobals
-		
-import flattener
-
-import assembler
-
 import mparser
+from flattener import FlattenHandler
+from instr_sel import InstrSelHandler
+from interference import LivenessHandler
+from alloc_regs import RegisterAlloc
+from print_handler import PrintHandler
 
 arg_parser = argparse.ArgumentParser(description='Translates a .py file to x86 assembly language')
 arg_parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=sys.stdin  )
 argv = sys.argv
 argv.pop(0)
 ns = arg_parser.parse_args(argv)
-
+pp = pprint.PrettyPrinter(indent=4,depth=2)
 for input_file in ns.infile:
-#	tree = compiler.parse(input_file.read())
-	tree = mparser.parser.parse(input_file.read())
-	
-#	print parser.lexer
-#	print tree
-	
 	(input_fname,input_ext) = os.path.splitext(input_file.name)
-#	print 'From'
-#	print '\t',tree
-	flattened = flattener.flatten(tree)
-#	print flattened
-#	print 'To'
-#	for line in flattened:
-#		print '\t', line
-#	print 'Vars'
-#	mglobals.varname_set = set(mglobals.varname_lst)
-#	mglobals.tvarname_set= set(mglobals.tvarname_lst)
-#	for var in mglobals.varname_set:
-#		print '\t',var
 	
-	outfile = open(input_fname + '.s','w')
+	input_text = input_file.read()
+	# ptree = compiler.parse(input_text)  # This might be useful later for debugging...
+	mtree = mparser.parser.parse(input_text)	
 	
-	asm_file = assembler.flattened_to_asm(flattened)
+	# Let's flatten this f@#$er...
+	instrs = FlattenHandler().preorder(mtree)
 	
-	#print repr(asm_file)
 	
-	outfile.write(str(asm_file))
-
+	
+	#print "Before:",instrs
+	# And select some instructions, I suppose...
+	instrs = InstrSelHandler().preorder(instrs)
+	#PrintHandler(repr).preorder(instrs)
+	
+	# And now we have to allocate the registers.
+	instrs = RegisterAlloc().allocate_registers(instrs)
 
