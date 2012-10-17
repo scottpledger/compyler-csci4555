@@ -1057,4 +1057,3 @@ pyobj error_pyobj(char* string) {
   printf(string);
   exit(-1);
 }
-

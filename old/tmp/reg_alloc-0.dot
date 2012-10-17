@@ -1,0 +1,529 @@
+graph {
+"ASMVar(VarName('t89',temp),None)"[color=cyan,label="ASMVar(VarName('t89',temp),None).0"]
+"ASMVar(VarName('t11',temp),None)"[color=cyan,label="ASMVar(VarName('t11',temp),None).1"]
+"ASMVar(VarName('t56',temp),None)"[color=cyan,label="ASMVar(VarName('t56',temp),None).2"]
+"ASMReg('edi')"[color=forestgreen,label="ASMReg('edi').3"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).4"]
+"ASMVar(VarName('t69',temp),None)"[color=cyan,label="ASMVar(VarName('t69',temp),None).5"]
+"ASMVar(VarName('t2',temp),None)"[color=cyan,label="ASMVar(VarName('t2',temp),None).6"]
+"ASMReg('edx')"[color=yellow,label="ASMReg('edx').7"]
+"ASMVar(VarName('t68',temp),None)"[color=cyan,label="ASMVar(VarName('t68',temp),None).8"]
+"ASMVar(VarName('t30',temp),None)"[color=cyan,label="ASMVar(VarName('t30',temp),None).9"]
+"ASMVar(VarName('t16',temp),None)"[color=cyan,label="ASMVar(VarName('t16',temp),None).10"]
+"ASMVar(VarName('t108',temp),None)"[color=cyan,label="ASMVar(VarName('t108',temp),None).11"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).12"]
+"ASMVar(VarName('t79',temp),None)"[color=cyan,label="ASMVar(VarName('t79',temp),None).13"]
+"ASMVar(VarName('t15',temp),None)"[color=cyan,label="ASMVar(VarName('t15',temp),None).14"]
+"ASMVar(VarName('t95',temp),None)"[color=cyan,label="ASMVar(VarName('t95',temp),None).15"]
+"ASMVar(VarName('t119',temp),None)"[color=cyan,label="ASMVar(VarName('t119',temp),None).16"]
+"ASMVar(VarName('t89',temp),None)"[color=cyan,label="ASMVar(VarName('t89',temp),None).17"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).18"]
+"ASMVar(VarName('t21',temp),None)"[color=cyan,label="ASMVar(VarName('t21',temp),None).19"]
+"ASMVar(VarName('t70',temp),None)"[color=cyan,label="ASMVar(VarName('t70',temp),None).20"]
+"ASMVar(VarName('t27',temp),None)"[color=cyan,label="ASMVar(VarName('t27',temp),None).21"]
+"ASMVar(VarName('t107',temp),None)"[color=cyan,label="ASMVar(VarName('t107',temp),None).22"]
+"ASMVar(VarName('t46',temp),None)"[color=cyan,label="ASMVar(VarName('t46',temp),None).23"]
+"ASMVar(VarName('t8',temp),None)"[color=cyan,label="ASMVar(VarName('t8',temp),None).24"]
+"ASMVar(VarName('t78',temp),None)"[color=cyan,label="ASMVar(VarName('t78',temp),None).25"]
+"ASMVar(VarName('t51',temp),None)"[color=cyan,label="ASMVar(VarName('t51',temp),None).26"]
+"ASMVar(VarName('t97',temp),None)"[color=cyan,label="ASMVar(VarName('t97',temp),None).27"]
+"ASMVar(VarName('t57',temp),None)"[color=cyan,label="ASMVar(VarName('t57',temp),None).28"]
+"ASMConst(12)"[color=green,label="ASMConst(12).29"]
+"ASMVar(VarName('t74',temp),None)"[color=cyan,label="ASMVar(VarName('t74',temp),None).30"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).31"]
+"ASMVar(VarName('t48',temp),None)"[color=cyan,label="ASMVar(VarName('t48',temp),None).32"]
+"ASMVar(VarName('y',user),None)"[color=cyan,label="ASMVar(VarName('y',user),None).33"]
+"ASMVar(VarName('t24',temp),None)"[color=cyan,label="ASMVar(VarName('t24',temp),None).34"]
+"ASMVar(VarName('b',user),None)"[color=cyan,label="ASMVar(VarName('b',user),None).35"]
+"ASMVar(VarName('t109',temp),None)"[color=cyan,label="ASMVar(VarName('t109',temp),None).36"]
+"ASMVar(VarName('t83',temp),None)"[color=cyan,label="ASMVar(VarName('t83',temp),None).37"]
+"ASMVar(VarName('t33',temp),None)"[color=cyan,label="ASMVar(VarName('t33',temp),None).38"]
+"ASMVar(VarName('t107',temp),None)"[color=cyan,label="ASMVar(VarName('t107',temp),None).39"]
+"ASMVar(VarName('t31',temp),None)"[color=cyan,label="ASMVar(VarName('t31',temp),None).40"]
+"ASMVar(VarName('t78',temp),None)"[color=cyan,label="ASMVar(VarName('t78',temp),None).41"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).42"]
+"ASMVar(VarName('t46',temp),None)"[color=cyan,label="ASMVar(VarName('t46',temp),None).43"]
+"ASMVar(VarName('t7',temp),None)"[color=cyan,label="ASMVar(VarName('t7',temp),None).44"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).45"]
+"ASMVar(VarName('t13',temp),None)"[color=cyan,label="ASMVar(VarName('t13',temp),None).46"]
+"ASMVar(VarName('t15',temp),None)"[color=cyan,label="ASMVar(VarName('t15',temp),None).47"]
+"ASMVar(VarName('t48',temp),None)"[color=cyan,label="ASMVar(VarName('t48',temp),None).48"]
+"ASMVar(VarName('t38',temp),None)"[color=cyan,label="ASMVar(VarName('t38',temp),None).49"]
+"ASMVar(VarName('t49',temp),None)"[color=cyan,label="ASMVar(VarName('t49',temp),None).50"]
+"ASMVar(VarName('t44',temp),None)"[color=cyan,label="ASMVar(VarName('t44',temp),None).51"]
+"ASMVar(VarName('t20',temp),None)"[color=cyan,label="ASMVar(VarName('t20',temp),None).52"]
+"ASMVar(VarName('t110',temp),None)"[color=cyan,label="ASMVar(VarName('t110',temp),None).53"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).54"]
+"ASMVar(VarName('t75',temp),None)"[color=cyan,label="ASMVar(VarName('t75',temp),None).55"]
+"ASMVar(VarName('t98',temp),None)"[color=cyan,label="ASMVar(VarName('t98',temp),None).56"]
+"ASMReg('ebx')"[color=cyan,label="ASMReg('ebx').57"]
+"ASMVar(VarName('t12',temp),None)"[color=cyan,label="ASMVar(VarName('t12',temp),None).58"]
+"ASMVar(VarName('t96',temp),None)"[color=cyan,label="ASMVar(VarName('t96',temp),None).59"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).60"]
+"ASMVar(VarName('t37',temp),None)"[color=cyan,label="ASMVar(VarName('t37',temp),None).61"]
+"ASMReg('esp')"[color=blue,label="ASMReg('esp').62"]
+"ASMVar(VarName('t111',temp),None)"[color=cyan,label="ASMVar(VarName('t111',temp),None).63"]
+"ASMVar(VarName('t6',temp),None)"[color=cyan,label="ASMVar(VarName('t6',temp),None).64"]
+"ASMVar(VarName('t110',temp),None)"[color=cyan,label="ASMVar(VarName('t110',temp),None).65"]
+"ASMVar(VarName('t40',temp),None)"[color=cyan,label="ASMVar(VarName('t40',temp),None).66"]
+"ASMReg('esi')"[color=brown,label="ASMReg('esi').67"]
+"ASMVar(VarName('t96',temp),None)"[color=cyan,label="ASMVar(VarName('t96',temp),None).68"]
+"ASMVar(VarName('t62',temp),None)"[color=cyan,label="ASMVar(VarName('t62',temp),None).69"]
+"ASMVar(VarName('c',user),None)"[color=cyan,label="ASMVar(VarName('c',user),None).70"]
+"ASMVar(VarName('t26',temp),None)"[color=cyan,label="ASMVar(VarName('t26',temp),None).71"]
+"ASMVar(VarName('t59',temp),None)"[color=cyan,label="ASMVar(VarName('t59',temp),None).72"]
+"ASMVar(VarName('t19',temp),None)"[color=cyan,label="ASMVar(VarName('t19',temp),None).73"]
+"ASMVar(VarName('t60',temp),None)"[color=cyan,label="ASMVar(VarName('t60',temp),None).74"]
+"ASMVar(VarName('y',user),None)"[color=cyan,label="ASMVar(VarName('y',user),None).75"]
+"ASMVar(VarName('t117',temp),None)"[color=cyan,label="ASMVar(VarName('t117',temp),None).76"]
+"ASMVar(VarName('t121',temp),None)"[color=cyan,label="ASMVar(VarName('t121',temp),None).77"]
+"ASMVar(VarName('t86',temp),None)"[color=cyan,label="ASMVar(VarName('t86',temp),None).78"]
+"ASMVar(VarName('t36',temp),None)"[color=cyan,label="ASMVar(VarName('t36',temp),None).79"]
+"ASMReg('ecx')"[color=orange,label="ASMReg('ecx').80"]
+"ASMVar(VarName('t84',temp),None)"[color=cyan,label="ASMVar(VarName('t84',temp),None).81"]
+"ASMVar(VarName('t29',temp),None)"[color=cyan,label="ASMVar(VarName('t29',temp),None).82"]
+"ASMVar(VarName('t93',temp),None)"[color=cyan,label="ASMVar(VarName('t93',temp),None).83"]
+"ASMVar(VarName('t5',temp),None)"[color=cyan,label="ASMVar(VarName('t5',temp),None).84"]
+"ASMVar(VarName('t100',temp),None)"[color=cyan,label="ASMVar(VarName('t100',temp),None).85"]
+"ASMVar(VarName('t81',temp),None)"[color=cyan,label="ASMVar(VarName('t81',temp),None).86"]
+"ASMVar(VarName('t88',temp),None)"[color=cyan,label="ASMVar(VarName('t88',temp),None).87"]
+"ASMVar(VarName('t116',temp),None)"[color=cyan,label="ASMVar(VarName('t116',temp),None).88"]
+"ASMVar(VarName('t50',temp),None)"[color=cyan,label="ASMVar(VarName('t50',temp),None).89"]
+"ASMVar(VarName('z',user),None)"[color=cyan,label="ASMVar(VarName('z',user),None).90"]
+"ASMVar(VarName('t18',temp),None)"[color=cyan,label="ASMVar(VarName('t18',temp),None).91"]
+"ASMVar(VarName('t72',temp),None)"[color=cyan,label="ASMVar(VarName('t72',temp),None).92"]
+"ASMVar(VarName('t58',temp),None)"[color=cyan,label="ASMVar(VarName('t58',temp),None).93"]
+"ASMVar(VarName('t87',temp),None)"[color=cyan,label="ASMVar(VarName('t87',temp),None).94"]
+"ASMVar(VarName('t39',temp),None)"[color=cyan,label="ASMVar(VarName('t39',temp),None).95"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).96"]
+"ASMVar(VarName('t30',temp),None)"[color=cyan,label="ASMVar(VarName('t30',temp),None).97"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).98"]
+"ASMVar(VarName('t23',temp),None)"[color=cyan,label="ASMVar(VarName('t23',temp),None).99"]
+"ASMVar(VarName('t35',temp),None)"[color=cyan,label="ASMVar(VarName('t35',temp),None).100"]
+"ASMVar(VarName('t99',temp),None)"[color=cyan,label="ASMVar(VarName('t99',temp),None).101"]
+"ASMVar(VarName('t22',temp),None)"[color=cyan,label="ASMVar(VarName('t22',temp),None).102"]
+"ASMVar(VarName('t115',temp),None)"[color=cyan,label="ASMVar(VarName('t115',temp),None).103"]
+"ASMVar(VarName('x',user),None)"[color=cyan,label="ASMVar(VarName('x',user),None).104"]
+"ASMVar(VarName('t71',temp),None)"[color=cyan,label="ASMVar(VarName('t71',temp),None).105"]
+"ASMVar(VarName('t4',temp),None)"[color=cyan,label="ASMVar(VarName('t4',temp),None).106"]
+"ASMVar(VarName('t56',temp),None)"[color=cyan,label="ASMVar(VarName('t56',temp),None).107"]
+"ASMVar(VarName('t10',temp),None)"[color=cyan,label="ASMVar(VarName('t10',temp),None).108"]
+"ASMVar(VarName('t73',temp),None)"[color=cyan,label="ASMVar(VarName('t73',temp),None).109"]
+"ASMVar(VarName('t87',temp),None)"[color=cyan,label="ASMVar(VarName('t87',temp),None).110"]
+"ASMVar(VarName('t63',temp),None)"[color=cyan,label="ASMVar(VarName('t63',temp),None).111"]
+"ASMVar(VarName('t17',temp),None)"[color=cyan,label="ASMVar(VarName('t17',temp),None).112"]
+"ASMVar(VarName('t105',temp),None)"[color=cyan,label="ASMVar(VarName('t105',temp),None).113"]
+"ASMVar(VarName('t114',temp),None)"[color=cyan,label="ASMVar(VarName('t114',temp),None).114"]
+"ASMVar(VarName('t9',temp),None)"[color=cyan,label="ASMVar(VarName('t9',temp),None).115"]
+"ASMVar(VarName('t0',temp),None)"[color=cyan,label="ASMVar(VarName('t0',temp),None).116"]
+"ASMVar(VarName('t32',temp),None)"[color=cyan,label="ASMVar(VarName('t32',temp),None).117"]
+"ASMVar(VarName('t52',temp),None)"[color=cyan,label="ASMVar(VarName('t52',temp),None).118"]
+"ASMVar(VarName('t28',temp),None)"[color=cyan,label="ASMVar(VarName('t28',temp),None).119"]
+"ASMVar(VarName('t42',temp),None)"[color=cyan,label="ASMVar(VarName('t42',temp),None).120"]
+"ASMVar(VarName('t51',temp),None)"[color=cyan,label="ASMVar(VarName('t51',temp),None).121"]
+"ASMVar(VarName('t34',temp),None)"[color=cyan,label="ASMVar(VarName('t34',temp),None).122"]
+"ASMVar(VarName('t94',temp),None)"[color=cyan,label="ASMVar(VarName('t94',temp),None).123"]
+"ASMVar(VarName('t41',temp),None)"[color=cyan,label="ASMVar(VarName('t41',temp),None).124"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).125"]
+"ASMVar(VarName('t84',temp),None)"[color=cyan,label="ASMVar(VarName('t84',temp),None).126"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).127"]
+"ASMVar(VarName('t119',temp),None)"[color=cyan,label="ASMVar(VarName('t119',temp),None).128"]
+"ASMVar(VarName('t65',temp),None)"[color=cyan,label="ASMVar(VarName('t65',temp),None).129"]
+"ASMVar(VarName('t91',temp),None)"[color=cyan,label="ASMVar(VarName('t91',temp),None).130"]
+"ASMVar(VarName('t104',temp),None)"[color=cyan,label="ASMVar(VarName('t104',temp),None).131"]
+"ASMVar(VarName('t14',temp),None)"[color=cyan,label="ASMVar(VarName('t14',temp),None).132"]
+"ASMVar(VarName('t113',temp),None)"[color=cyan,label="ASMVar(VarName('t113',temp),None).133"]
+"ASMVar(VarName('t55',temp),None)"[color=cyan,label="ASMVar(VarName('t55',temp),None).134"]
+"ASMVar(VarName('z',user),None)"[color=cyan,label="ASMVar(VarName('z',user),None).135"]
+"ASMVar(VarName('t77',temp),None)"[color=cyan,label="ASMVar(VarName('t77',temp),None).136"]
+"ASMVar(VarName('t64',temp),None)"[color=cyan,label="ASMVar(VarName('t64',temp),None).137"]
+"ASMVar(VarName('t43',temp),None)"[color=cyan,label="ASMVar(VarName('t43',temp),None).138"]
+"ASMVar(VarName('t62',temp),None)"[color=cyan,label="ASMVar(VarName('t62',temp),None).139"]
+"ASMVar(VarName('t85',temp),None)"[color=cyan,label="ASMVar(VarName('t85',temp),None).140"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).141"]
+"ASMVar(VarName('t103',temp),None)"[color=cyan,label="ASMVar(VarName('t103',temp),None).142"]
+"ASMVar(VarName('t112',temp),None)"[color=cyan,label="ASMVar(VarName('t112',temp),None).143"]
+"ASMVar(VarName('t76',temp),None)"[color=cyan,label="ASMVar(VarName('t76',temp),None).144"]
+"ASMVar(VarName('t92',temp),None)"[color=cyan,label="ASMVar(VarName('t92',temp),None).145"]
+"ASMVar(VarName('a',user),None)"[color=cyan,label="ASMVar(VarName('a',user),None).146"]
+"ASMVar(VarName('t66',temp),None)"[color=cyan,label="ASMVar(VarName('t66',temp),None).147"]
+"ASMVar(VarName('t11',temp),None)"[color=cyan,label="ASMVar(VarName('t11',temp),None).148"]
+"ASMVar(VarName('t53',temp),None)"[color=cyan,label="ASMVar(VarName('t53',temp),None).149"]
+"ASMVar(VarName('t64',temp),None)"[color=cyan,label="ASMVar(VarName('t64',temp),None).150"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).151"]
+"ASMVar(VarName('t102',temp),None)"[color=cyan,label="ASMVar(VarName('t102',temp),None).152"]
+"ASMVar(VarName('t118',temp),None)"[color=cyan,label="ASMVar(VarName('t118',temp),None).153"]
+"ASMVar(VarName('t47',temp),None)"[color=cyan,label="ASMVar(VarName('t47',temp),None).154"]
+"ASMVar(VarName('t61',temp),None)"[color=cyan,label="ASMVar(VarName('t61',temp),None).155"]
+"ASMVar(VarName('t82',temp),None)"[color=cyan,label="ASMVar(VarName('t82',temp),None).156"]
+"ASMVar(VarName('t112',temp),None)"[color=cyan,label="ASMVar(VarName('t112',temp),None).157"]
+"ASMVar(VarName('t54',temp),None)"[color=cyan,label="ASMVar(VarName('t54',temp),None).158"]
+"ASMVar(VarName('t67',temp),None)"[color=cyan,label="ASMVar(VarName('t67',temp),None).159"]
+"ASMVar(VarName('a',user),None)"[color=cyan,label="ASMVar(VarName('a',user),None).160"]
+"ASMConst(12)"[color=cyan,label="ASMConst(12).161"]
+"ASMVar(VarName('t101',temp),None)"[color=cyan,label="ASMVar(VarName('t101',temp),None).162"]
+"ASMVar(VarName('t1',temp),None)"[color=cyan,label="ASMVar(VarName('t1',temp),None).163"]
+"ASMVar(VarName('t58',temp),None)"[color=cyan,label="ASMVar(VarName('t58',temp),None).164"]
+"ASMVar(VarName('t25',temp),None)"[color=cyan,label="ASMVar(VarName('t25',temp),None).165"]
+"ASMVar(VarName('t26',temp),None)"[color=cyan,label="ASMVar(VarName('t26',temp),None).166"]
+"ASMVar(VarName('t120',temp),None)"[color=cyan,label="ASMVar(VarName('t120',temp),None).167"]
+"ASMVar(VarName('t3',temp),None)"[color=cyan,label="ASMVar(VarName('t3',temp),None).168"]
+"ASMVar(VarName('t90',temp),None)"[color=cyan,label="ASMVar(VarName('t90',temp),None).169"]
+"ASMVar(VarName('t45',temp),None)"[color=cyan,label="ASMVar(VarName('t45',temp),None).170"]
+"ASMVar(VarName('t54',temp),None)"[color=cyan,label="ASMVar(VarName('t54',temp),None).171"]
+"ASMReg('eax')"[color=green,label="ASMReg('eax').172"]
+"ASMVar(VarName('t80',temp),None)"[color=cyan,label="ASMVar(VarName('t80',temp),None).173"]
+"ASMVar(VarName('t68',temp),None)"[color=cyan,label="ASMVar(VarName('t68',temp),None).174"]
+"ASMVar(VarName('t106',temp),None)"[color=cyan,label="ASMVar(VarName('t106',temp),None).175"]
+"ASMVar(VarName('y',user),None)"[color=cyan,label="ASMVar(VarName('y',user),None).176"]
+"ASMVar(VarName('t101',temp),None)"[color=cyan,label="ASMVar(VarName('t101',temp),None).177"]
+
+"ASMReg('eax')" -- "ASMVar(VarName('t56',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t37',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('y',user),None)"
+"ASMVar(VarName('t5',temp),None)" -- "ASMReg('esp')"
+"ASMConst(12)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t68',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t112',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t57',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t61',temp),None)"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMVar(VarName('t68',temp),None)" -- "ASMReg('eax')"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t32',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('c',user),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t85',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t91',temp),None)"
+"ASMVar(VarName('t43',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t62',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t112',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t107',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t25',temp),None)"
+"ASMVar(VarName('t86',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t48',temp),None)"
+"ASMVar(VarName('t18',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t111',temp),None)"
+"ASMVar(VarName('t118',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t113',temp),None)"
+"ASMVar(VarName('t90',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t61',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t106',temp),None)" -- "ASMReg('eax')"
+"ASMReg('eax')" -- "ASMVar(VarName('t110',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t70',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t36',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('x',user),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t31',temp),None)"
+"ASMVar(VarName('c',user),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t3',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t22',temp),None)"
+"ASMVar(VarName('t120',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t77',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t73',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t12',temp),None)"
+"ASMVar(VarName('t113',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t64',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t6',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t19',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t105',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t33',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t60',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t28',temp),None)"
+"ASMVar(VarName('t56',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t117',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t48',temp),None)"
+"ASMVar(VarName('t47',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t95',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t2',temp),None)"
+"ASMVar(VarName('t35',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t96',temp),None)"
+"ASMVar(VarName('t121',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t46',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t13',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t24',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t96',temp),None)"
+"ASMVar(VarName('t99',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t26',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('a',user),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('z',user),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t24',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t74',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t77',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t87',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t44',temp),None)"
+"ASMVar(VarName('t39',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t39',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t16',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t121',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t20',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t37',temp),None)"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMVar(VarName('t76',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t11',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('b',user),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t78',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t14',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t48',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t116',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t46',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t70',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t92',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t46',temp),None)"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t115',temp),None)"
+"ASMVar(VarName('t14',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t56',temp),None)"
+"ASMVar(VarName('t94',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t10',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t93',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t44',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t6',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t84',temp),None)"
+"ASMVar(VarName('t0',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t17',temp),None)"
+"ASMVar(VarName('t58',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t107',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t71',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t18',temp),None)"
+"ASMVar(VarName('a',user),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t30',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t101',temp),None)"
+"ASMConst(12)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t27',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t64',temp),None)"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t43',temp),None)"
+"ASMVar(VarName('z',user),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t33',temp),None)"
+"ASMVar(VarName('t53',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t38',temp),None)"
+"ASMVar(VarName('t111',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t109',temp),None)"
+"ASMVar(VarName('t41',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t31',temp),None)"
+"ASMVar(VarName('t106',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t28',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t104',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t63',temp),None)"
+"ASMVar(VarName('t32',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t109',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t97',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t79',temp),None)"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMVar(VarName('t67',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t72',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t78',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t57',temp),None)"
+"ASMVar(VarName('t117',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t0',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t90',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t107',temp),None)"
+"ASMVar(VarName('t91',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t69',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t75',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t108',temp),None)"
+"ASMVar(VarName('t66',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t81',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t89',temp),None)"
+"ASMVar(VarName('t63',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMVar(VarName('t25',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t22',temp),None)" -- "ASMReg('esp')"
+"ASMConst(12)" -- "ASMReg('esp')"
+"ASMVar(VarName('x',user),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t26',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t103',temp),None)"
+"ASMVar(VarName('t65',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t72',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t34',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t48',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t15',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t21',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t78',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('y',user),None)"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMVar(VarName('t116',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t96',temp),None)"
+"ASMVar(VarName('t29',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t68',temp),None)"
+"ASMVar(VarName('t103',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t105',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t29',temp),None)"
+"ASMVar(VarName('y',user),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t2',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t74',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t30',temp),None)"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t89',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t87',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t52',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('a',user),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t54',temp),None)"
+"ASMVar(VarName('z',user),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t50',temp),None)"
+"ASMVar(VarName('t112',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t84',temp),None)"
+"ASMVar(VarName('t92',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t80',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMReg('edx')"
+"ASMReg('esp')" -- "ASMVar(VarName('t46',temp),None)"
+"ASMVar(VarName('t42',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t100',temp),None)"
+"ASMVar(VarName('t54',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t58',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t45',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t82',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t11',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t75',temp),None)"
+"ASMVar(VarName('t30',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t5',temp),None)"
+"ASMVar(VarName('t60',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t52',temp),None)" -- "ASMReg('esp')"
+"ASMConst(12)" -- "ASMReg('esp')"
+"ASMVar(VarName('t62',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t23',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t78',temp),None)"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMReg('esp')" -- "ASMVar(VarName('t97',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t58',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t110',temp),None)"
+"ASMVar(VarName('t110',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t118',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('y',user),None)"
+"ASMVar(VarName('t4',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t26',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t112',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t7',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('b',user),None)"
+"ASMVar(VarName('t100',temp),None)" -- "ASMReg('esp')"
+"ASMConst(12)" -- "ASMReg('esp')"
+"ASMVar(VarName('t88',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t94',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t11',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t16',temp),None)"
+"ASMVar(VarName('t40',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t80',temp),None)" -- "ASMReg('eax')"
+"ASMReg('eax')" -- "ASMVar(VarName('t51',temp),None)"
+"ASMVar(VarName('t81',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t93',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t41',temp),None)"
+"ASMVar(VarName('t82',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t51',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t104',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t23',temp),None)"
+"ASMVar(VarName('t114',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t85',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t26',temp),None)"
+"ASMVar(VarName('t62',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t12',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t13',temp),None)"
+"ASMVar(VarName('a',user),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMVar(VarName('t36',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t110',temp),None)"
+"ASMConst(12)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMReg('edx')"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMVar(VarName('t64',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t8',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t38',temp),None)"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t98',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t15',temp),None)"
+"ASMVar(VarName('t84',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t20',temp),None)"
+"ASMVar(VarName('t87',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMVar(VarName('t68',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMReg('eax')"
+"ASMReg('esp')" -- "ASMVar(VarName('t7',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t56',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t42',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t47',temp),None)"
+"ASMVar(VarName('t17',temp),None)" -- "ASMReg('esp')"
+"ASMReg('ecx')" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t102',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t89',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t83',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t108',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t89',temp),None)"
+"ASMVar(VarName('t84',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t1',temp),None)"
+"ASMConst(12)" -- "ASMReg('esp')"
+"ASMVar(VarName('t3',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t8',temp),None)"
+"ASMVar(VarName('t101',temp),None)" -- "ASMReg('eax')"
+"ASMReg('eax')" -- "ASMVar(VarName('t99',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t51',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t67',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t119',temp),None)"
+"ASMVar(VarName('y',user),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t49',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t98',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t79',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t19',temp),None)"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t86',temp),None)"
+"ASMVar(VarName('t96',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMReg('ecx')"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t35',temp),None)"
+"ASMVar(VarName('t55',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t15',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t64',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t76',temp),None)"
+"ASMVar(VarName('t115',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t27',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t88',temp),None)"
+"ASMVar(VarName('t73',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t114',temp),None)"
+"ASMVar(VarName('y',user),None)" -- "ASMReg('eax')"
+"ASMReg('esp')" -- "ASMVar(VarName('t69',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t55',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t9',temp),None)"
+"ASMVar(VarName('t101',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t45',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t58',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t65',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t11',temp),None)"
+"ASMVar(VarName('t54',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t95',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('z',user),None)"
+"ASMVar(VarName('t59',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t4',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t107',temp),None)"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t40',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t119',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t53',temp),None)"
+"ASMVar(VarName('t34',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t87',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t120',temp),None)"
+"ASMVar(VarName('t9',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t49',temp),None)"
+"ASMVar(VarName('t71',temp),None)" -- "ASMReg('esp')"
+"ASMReg('esp')" -- "ASMVar(VarName('t21',temp),None)"
+"ASMVar(VarName('t119',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t66',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t83',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t119',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t51',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t59',temp),None)"
+"ASMReg('esp')" -- "ASMVar(VarName('t15',temp),None)"
+"ASMVar(VarName('t102',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t10',temp),None)"
+"ASMVar(VarName('t101',temp),None)" -- "ASMReg('esp')"
+"ASMVar(VarName('t1',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMVar(VarName('t62',temp),None)"
+"ASMVar(VarName('t50',temp),None)" -- "ASMReg('esp')"
+"ASMReg('eax')" -- "ASMConst(12)"
+"ASMReg('eax')" -- "ASMVar(VarName('t54',temp),None)"
+"ASMReg('eax')" -- "ASMVar(VarName('t30',temp),None)"
+"ASMReg('eax')" -- "ASMConst(12)"
+}
+
