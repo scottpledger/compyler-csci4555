@@ -4,14 +4,31 @@ import mglobals
 
 #Lexer
 
-tokens   = ('PRINT','INT','PLUS','MINUS','EQUALS','IDENTIFIER','INPUT','LPAREN','RPAREN')
-t_PRINT  = r'print'
-t_INPUT  = r'input'
-t_PLUS   = r'\+'
-t_EQUALS = r'='
-t_MINUS  = r'-'
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
+tokens         = ('PRINT','INT','BOOL','PLUS','MINUS','EQUALS','IDENTIFIER',\
+		  'INPUT','AND','OR','NOT','IF','ELSE','IS','TRUE','FALSE',\
+		  'DOUBLEEQUALS','NOTEQUALS','LPAREN','RPAREN','LBRACKET',\
+		  'RBRACKET','LBRACE','RBRACE','COMMA','COLON')
+t_PRINT        = r'print'
+t_INPUT        = r'input'
+t_PLUS         = r'\+'
+t_EQUALS       = r'='
+t_MINUS        = r'-'
+t_AND          = r'and'
+t_OR           = r'or'
+t_NOT          = r'not'
+t_IF           = r'if'
+t_ELSE         = r'else'
+t_IS           = r'is'
+t_DOUBLEEQUALS = r'=='
+t_NOTEQUALS    = r'!='
+t_LPAREN       = r'\('
+t_RPAREN       = r'\)'
+t_LBRACKET     = r'\['
+t_RBRACKET     = r'\]'
+t_LBRACE       = r'\{'
+t_RBRACE       = r'\}'
+t_COMMA        = r'\,'
+t_COLON        = r'\:'
 
 t_ignore = ' \t'
 t_ignore_COMMENT = r'\#.*'
@@ -29,6 +46,8 @@ def t_INT(t):
 		print "integer value too large", t.value
 		t.value = 0
 	return t
+def t_BOOL(t):
+	r'\d+'
 
 def t_newline(t):
 	r'\n+'
@@ -56,7 +75,7 @@ precedence = (
 )
 
 def p_program(t):
-	'program : module'
+	'''program : module'''
 	t[0] = t[1]
 
 def p_module(t):
@@ -75,6 +94,7 @@ def p_statement(t):
 def p_simple_statement(t):
 	'''simple_statement : PRINT expression
 	                    | name EQUALS expression
+			    | target EQUALS expression 
 	                    | expression '''
 	if(len(t)==3):
 		# PRINT expression
@@ -82,6 +102,7 @@ def p_simple_statement(t):
 	elif(len(t)==4):
 		# name EQUALS expression
 		t[0] = Assign([AssName(t[1].name,'OP_ASSIGN')],t[3])
+	elif(
 	elif(len(t)==2):
 		# expression
 		t[0] = Discard(t[1])
