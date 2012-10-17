@@ -143,6 +143,7 @@ def p_name(t):
 
 
 def p_error(t):
+	print "Syntax error with %s" %(t)
 	print "Syntax error at '%s' on line %s with token:" % (t.value , t.lineno)
 	print "    ",t
 

@@ -110,28 +110,20 @@ def flatnode_to_asm(n):
 				push_n = ASMConst( n.args[0].value )
 
 			asm_nodes += [
+				ASMSub( ASMConst(12), ASMReg('esp')),
 				ASMPush( push_n ),
 				ASMCall( ASMLabel('print_int_nl') ),
-				ASMAdd( ASMConst(4), ASMReg('esp') )
+				ASMAdd( ASMConst(16), ASMReg('esp') )
 			]
 	
 	return asm_nodes
 
 #def flattened_to_asm(flattened,output):
 def flattened_to_asm(flattened):
-	# Okay, so first we need to set up where variables will be located relative to the ebp.
+	
 	offset = + 4
-	#print mglobals.varname_lst
-	#mglobals.varname_set = set(mglobals.varname_lst)
-	#print mglobals.varname_set
-	#for var in mglobals.varname_set:
-	#s	if isinstance(var, TempName):
-	#		mglobals.tvaroff_dict[var.name]=-offset
-	#	else:
-	#		mglobals.varoff_dict[var.name]=-offset
-	#	offset = offset + 4
-	# with that now made, we can call flatnode_to_asm to write the actual output.
-	ralloc = RegisterAllocator()
+	
+	
 	func_nodes = [
 		#ASMSub( ASMConst(str(offset)), ASMReg('esp') )
 	]
@@ -151,10 +143,32 @@ def flattened_to_asm(flattened):
 		func_nodes += flatnode_to_asm(line)
 		i+=1
 	
-	ralloc.allocate_registers(func_nodes)
+	ralloc = RegisterAllocator()
+	func_nodes = ralloc.allocate_registers(func_nodes)
+	new_func_nodes = []
+	for n in func_nodes:
+		if isinstance(n,ASMMove):
+			lloc = ""
+			rloc = ""
+			if isinstance(n.left,ASMVar):
+				lloc = n.left.loc
+			elif isinstance(n.left,ASMReg):
+				lloc = n.left
+	
+			if isinstance(n.right,ASMVar):
+				rloc = n.right.loc
+			elif isinstance(n.right,ASMReg):
+				rloc = n.right
+	
+			if not str(lloc)==str(rloc):
+				new_func_nodes.append(n)
+		else:
+			new_func_nodes.append(n)
+	func_nodes = new_func_nodes
+	
 	
 	func_nodes = [
-		ASMSub( ASMConst(str(4*(len(ralloc.int_graph.avail_stacks)))), ASMReg('esp') )
+		ASMSub( ASMConst(str(4*(1+len(ralloc.int_graph.avail_stacks)))), ASMReg('esp') )
 	] + func_nodes
 	
 	asm_file = ASMFile([
