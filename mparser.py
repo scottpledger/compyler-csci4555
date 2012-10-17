@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 
-import mglobals
+
 
 #Lexer
 

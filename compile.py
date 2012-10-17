@@ -1,44 +1,53 @@
-#!/usr/bin/python2.7
+#! /usr/local/bin/python
 
-import os
-import os.path
 import sys
-import argparse
 import compiler
-import compiler.ast
-import pprint
 from compiler.ast import *
-
+from ir_x86 import *
+from flatten1 import FlattenVisitor
+from instruction_selection2 import InstrSelVisitor2
+from generate_x86_1 import GenX86Visitor
+from build_interference import BuildInterferenceVisitor
+from register_alloc1 import RegisterAlloc
+from print_visitor import PrintVisitor
+from vis import Visitor
+from os.path import splitext
 import mparser
-from flattener import FlattenHandler
-from instr_sel import InstrSelHandler
-from interference import LivenessHandler
-from alloc_regs import RegisterAlloc
-from print_handler import PrintHandler
 
-arg_parser = argparse.ArgumentParser(description='Translates a .py file to x86 assembly language')
-arg_parser.add_argument(  'infile', nargs='+', type=argparse.FileType('r'), default=sys.stdin  )
-argv = sys.argv
-argv.pop(0)
-ns = arg_parser.parse_args(argv)
-pp = pprint.PrettyPrinter(indent=4,depth=2)
-for input_file in ns.infile:
-	(input_fname,input_ext) = os.path.splitext(input_file.name)
-	
-	input_text = input_file.read()
-	# ptree = compiler.parse(input_text)  # This might be useful later for debugging...
-	mtree = mparser.parser.parse(input_text)	
-	
-	# Let's flatten this f@#$er...
-	instrs = FlattenHandler().preorder(mtree)
-	
-	
-	
-	#print "Before:",instrs
-	# And select some instructions, I suppose...
-	instrs = InstrSelHandler().preorder(instrs)
-	#PrintHandler(repr).preorder(instrs)
-	
-	# And now we have to allocate the registers.
-	instrs = RegisterAlloc().allocate_registers(instrs)
+debug = False
+
+try:
+    input_file_name = sys.argv[1]
+    #ast = compiler.parseFile(input_file_name)
+    input_file = file(input_file_name,'wr')
+    ast = mparser.parser.parse(input_file.read())
+    if debug:
+        print 'finished parsing'
+    instrs = FlattenVisitor().preorder(ast)
+    if debug:
+        print 'finished flattening'
+
+    instrs = InstrSelVisitor2().preorder(instrs)
+    if debug:
+        print 'finished instruction selection'
+        print PrintVisitor().preorder(instrs)
+        print 'starting register allocation'
+        
+    instrs = RegisterAlloc().allocate_registers(instrs, input_file_name)
+    if debug:
+        print 'finished register allocation'
+        print PrintVisitor().preorder(instrs)
+
+    x86 = GenX86Visitor().preorder(instrs)
+    if debug:
+        print 'finished generating x86'
+
+    asm_file = open(splitext(input_file_name)[0] + '.s', 'w')
+    print >>asm_file, x86
+
+except EOFError:
+    print "Could not open file %s." % sys.argv[1]
+except Exception, e:
+    print e.args[0]
+    exit(-1)
 

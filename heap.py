@@ -1,4 +1,3 @@
- 
 
 def parent(i):
     return i / 2

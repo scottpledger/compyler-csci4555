@@ -1,0 +1,6 @@
+Checking: ASMMove(ASMConst(4),ASMVar(VarName('z',user),ASMReg('eax')))
+to see if  == %eax , which is False
+Checking: ASMMove(ASMConst(0),ASMVar(VarName('w',user),ASMReg('eax')))
+to see if  == %eax , which is False
+Checking: ASMMove(ASMConst(1),ASMVar(VarName('z1',user),ASMReg('edi')))
+to see if  == %edi , which is False
