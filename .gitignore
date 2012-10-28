@@ -2,6 +2,11 @@
 *~
 *.zip
 *.pyc
+*.pdf
+*.toc
+*.tex.backup
+*.log
+*.aux
 tmp/*
 parser.out
 parsetab.py
