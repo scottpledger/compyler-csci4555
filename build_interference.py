@@ -30,41 +30,42 @@ class ModifyLiveVisitor(Visitor):
 
     # lhs += rhs
     def visitIntAddInstr(self, n, live):
-        n.live = live | free_vars(n.lhs) | free_vars(n.rhs[0])
-        return n.live
+        n.live = live
+        return live | free_vars(n.lhs) | free_vars(n.rhs[0])
 
     # lhs -= rhs
     def visitIntSubInstr(self, n, live):
-        n.live = live | free_vars(n.lhs) | free_vars(n.rhs[0])
-        return n.live
+        n.live = live
+        return live | free_vars(n.lhs) | free_vars(n.rhs[0])
 
     # lhs = -lhs
     def visitIntNegInstr(self, n, live):
-        n.live = live | free_vars(n.lhs)
-        return n.live
+        n.live = live
+        return live | free_vars(n.lhs)
 
     # lhs = rhs
     def visitIntMoveInstr(self, n, live):
-        n.live = (live - free_vars(n.lhs)) | free_vars(n.rhs[0])
-        return n.live
+        n.live = live
+        return (live - free_vars(n.lhs)) | free_vars(n.rhs[0])
 
     def visitCallX86(self, n, live):
         n.live = live
-        return n.live
+        return live
 
     def visitPush(self, n, live):
-        n.live = live | free_vars(n.arg)
-        return n.live
+        n.live = live
+        return live | free_vars(n.arg)
 
     def visitPop(self, n, live):
         n.live = live
-        return n.live
+        return live
 
     def visitPopValue(self, n, live):
-        n.live = live - free_vars(n.target)
-        return n.live
+        n.live = live
+        return live - free_vars(n.target)
     
     def visitStmt(self, n, live):
+        n.live = live
         for s in reversed(n.nodes):
             if debug:
                 print live

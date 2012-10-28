@@ -1,8 +1,0 @@
-ASMMove(ASMConst(4),ASMVar(VarName('z',user),ASMReg('eax')))
-ASMMove(ASMConst(0),ASMVar(VarName('w',user),ASMReg('eax')))
-ASMMove(ASMConst(1),ASMVar(VarName('z1',user),ASMReg('edi')))
-ASMAdd(ASMVar(VarName('z1',user),ASMReg('edi')),ASMVar(VarName('t0',temp),ASMReg('eax')))
-ASMAdd(ASMConst(1),ASMVar(VarName('t1',temp),ASMReg('edx')))
-ASMPush(ASMVar(VarName('w1',user),ASMReg('eax')))
-ASMCall(ASMLabel('print_int_nl'))
-ASMAdd(ASMConst(4),ASMReg('esp'))

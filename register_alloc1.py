@@ -17,7 +17,7 @@ from os.path import splitext
 from priority_queue import PriorityQueue
 import random
 
-debug = True
+debug = False
 
 unspillable = [[]]
 
