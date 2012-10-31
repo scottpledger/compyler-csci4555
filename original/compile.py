@@ -5,17 +5,17 @@ import sys
 import compiler
 from compiler.ast import *
 from ir_x86 import *
-from explicit import PrintASTVisitor2
+from explicit2 import PrintASTVisitor2
 from heapify import HeapifyVisitor, FreeInFunVisitor
-from explicate import ExplicateVisitor2
+from explicate2 import ExplicateVisitor2
 from type_check2 import TypeCheckVisitor2
 from closure_conversion import ClosureConversionVisitor
-from flatten import FlattenVisitor3
-from instruction_selection import InstrSelVisitor4
-from register_alloc import RegisterAlloc3
-from print_visitor import PrintVisitor3
-from generate_x86 import GenX86Visitor3
-from generate_x86 import fun_prefix
+from flatten3 import FlattenVisitor3
+from instruction_selection4 import InstrSelVisitor4
+from register_alloc3 import RegisterAlloc3
+from print_visitor3 import PrintVisitor3
+from generate_x86_3 import GenX86Visitor3
+from generate_x86_1 import fun_prefix
 from remove_structured_control import RemoveStructuredControl
 from uniquify import UniquifyVisitor
 from os.path import splitext

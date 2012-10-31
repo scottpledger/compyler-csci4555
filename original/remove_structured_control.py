@@ -1,7 +1,7 @@
 from compiler.ast import *
 from vis import Visitor
 from compiler_utilities import *
-from ir_x86 import *
+from ir_x86_2 import *
 
 class RemoveStructuredControl(Visitor):
 

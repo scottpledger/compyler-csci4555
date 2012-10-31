@@ -7,7 +7,7 @@ from ir_x86 import *
 from vis import Visitor
 from print_visitor import PrintVisitor
 from assigned_vars import AssignedVars, full_reg
-from ir import FunName
+from ir1 import FunName
 import sys
 
 debug = False

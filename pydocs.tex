@@ -1,0 +1,203 @@
+\documentclass[letter,10pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+\usepackage{fullpage}
+
+\usepackage[utf8]{inputenc}
+
+\title{}
+\author{}
+\date{}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\usepackage{listings}
+\usepackage{color}
+ 
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  language=Python,                % the language of the code
+  basicstyle=\ttfamily\scriptsize,           % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=2,                   % the step between two line-numbers. If it's 1, each line 
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=left,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add LaTeX within your code
+  morekeywords={*,...},               % if you want to add more keywords to the set
+  columns=fullflexible
+}
+
+\begin{document}
+
+\section*{General}
+
+\subsection{compile.py}
+\lstinputlisting{compile.py}
+
+\clearpage
+\section{Lexing and Parsing}
+Some stuff will eventually go here
+
+\clearpage
+\section{Uniquify}
+
+\subsection{uniquify.py}
+\lstinputlisting{uniquify.py}
+
+\clearpage
+\section{Explicate Operations}
+
+\subsection{explicate.py}
+\lstinputlisting{explicate.py}
+
+\clearpage
+\section{Heapify Variables}
+
+\subsection{heapify.py}
+\lstinputlisting{heapify.py}
+
+\subsection{type\_check2.py}
+\lstinputlisting{type_check2.py}
+
+\clearpage
+\section{Closure Conversion}
+
+\subsection{closure\_conversion.py}
+\lstinputlisting{closure_conversion.py}
+
+\clearpage
+\section{Flatten Expressions}
+
+\subsection{flatten.py}
+\lstinputlisting{flatten.py}
+
+\clearpage
+\section{Instruction Selection}
+
+\subsection{instruction\_selection.py}
+\lstinputlisting{instruction_selection.py}
+
+\clearpage
+\section{Allocation of Registers}
+
+\subsection{register\_alloc.py}
+\lstinputlisting{register_alloc.py}
+
+\subsection{build\_interference.py}
+\lstinputlisting{build_interference.py}
+
+\subsection{assigned\_vars.py}
+\lstinputlisting{assigned_vars.py}
+
+\clearpage
+\section{Remove Structured Control Flow}
+
+\subsection{remove\_structured\_control.py}
+\lstinputlisting{remove_structured_control.py}
+
+\clearpage
+\section{Print x86}
+
+\subsection{generate\_x86.py}
+\lstinputlisting{generate_x86.py}
+
+\clearpage
+\section*{Utilities}
+
+\subsection{compiler\_utilities.py}
+\lstinputlisting{compiler_utilities.py}
+
+\subsection{explicit.py}
+\lstinputlisting{explicit.py}
+
+\subsection{find\_locals.py}
+\lstinputlisting{find_locals.py}
+
+\subsection{free\_vars.py}
+\lstinputlisting{free_vars.py}
+
+\subsection{heap.py}
+\lstinputlisting{heap.py}
+
+\subsection{ir.py}
+\lstinputlisting{ir.py}
+
+\subsection{ir\_x86.py}
+\lstinputlisting{ir_x86.py}
+
+\subsection{print\_visitor.py}
+\lstinputlisting{print_visitor.py}
+
+\subsection{priority\_queue.py}
+\lstinputlisting{priority_queue.py}
+
+\subsection{vis.py}
+\lstinputlisting{vis.py}
+
+\clearpage
+\section*{C Code}
+
+\subsection{Runtime}
+
+\subsubsection{runtime.h}
+\lstinputlisting[language=C]{runtime.h}
+
+\subsubsection{runtime.c}
+\lstinputlisting[language=C]{runtime.c}
+
+\clearpage
+\subsection{Hashtable}
+\subsubsection{hashtable.h}
+\lstinputlisting[language=C]{hashtable.h}
+
+\subsubsection{hashtable.c}
+\lstinputlisting[language=C]{hashtable.c}
+
+\subsubsection{hashtable\_private.h}
+\lstinputlisting[language=C]{hashtable_private.h}
+
+\clearpage
+\subsection{Hashtable Iter}
+\subsubsection{hashtable\_itr.h}
+\lstinputlisting[language=C]{hashtable_itr.h}
+
+\subsubsection{hashtable\_itr.c}
+\lstinputlisting[language=C]{hashtable_itr.c}
+
+\clearpage
+\subsection{Hashtable Utility}
+\subsubsection{hashtable\_utility.h}
+\lstinputlisting[language=C]{hashtable_utility.h}
+
+\subsubsection{hashtable\_utility.c}
+\lstinputlisting[language=C]{hashtable_utility.c}
+
+
+
+
+\end{document}

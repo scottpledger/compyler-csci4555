@@ -1,10 +1,11 @@
 from vis import Visitor
 from compiler_utilities import *
-from explicate import letify,ExplicateVisitor2
+from explicate1 import letify
+from explicate2 import ExplicateVisitor2
 from explicit import *
 from free_vars import FreeVarsVisitor
 from find_locals import FindLocalsVisitor
-from ir import FunName, IndirectCallFunc
+from ir1 import FunName, IndirectCallFunc
 
 class ClosureConversionVisitor(Visitor):
 

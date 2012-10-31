@@ -2,7 +2,7 @@ from vis import Visitor
 from free_vars import FreeVarsVisitor
 from compiler.ast import *
 from explicit import *
-from explicate import ExplicateVisitor2
+from explicate2 import ExplicateVisitor2
 from find_locals import FindLocalsVisitor
 from compiler_utilities import *
 
