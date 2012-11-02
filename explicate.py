@@ -202,3 +202,13 @@ class ExplicateVisitor2(ExplicateVisitor):
     def visitLambda(self, n):
         return Lambda(n.argnames, n.defaults, n.flags,
                       Stmt([Return(self.dispatch(n.code))]))
+    
+    def visitWhile(self, n):
+        test = self.dispatch(n.test)
+        body = self.dispatch(n.body)
+        if not n.else_ == None:
+          else_ = self.dispatch(n.else_)
+        else:
+          else_ = None
+        return While(letify(test, lambda t: gen_is_true(t)),
+                     body, else_)

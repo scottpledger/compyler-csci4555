@@ -1,7 +1,7 @@
 ###############################################################################
 # Visitor
 
-debug = False
+debug = True
 
 class Visitor:
     def __init__(self):

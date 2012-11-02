@@ -68,11 +68,14 @@ class FreeInFunVisitor(Visitor):
     def visitIf(self, n):
         self.dispatch(n.tests[0][0])
         self.dispatch(n.tests[0][1])
-        self.dispatch(n.else_)
+        if not n.else_ == None:
+            self.dispatch(n.else_)
 
     def visitWhile(self, n):
         self.dispatch(n.test)
         self.dispatch(n.body)
+        if not n.else_ == None:
+            self.dispatch(n.else_)
 
     def visitInjectFrom(self, n):
         self.dispatch(n.arg)

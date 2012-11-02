@@ -46,6 +46,11 @@ class UniquifyVisitor(Visitor):
         right = self.dispatch(n.right, renaming)
         return Add((left, right))
     
+    def visitSub(self, n, renaming):
+        left = self.dispatch(n.left, renaming)
+        right = self.dispatch(UnarySub(n.right), renaming)
+        return Add((left, right))
+    
     # should do error checking
     def visitUnarySub(self, n, renaming):
         expr = self.dispatch(n.expr, renaming)
