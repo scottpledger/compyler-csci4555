@@ -28,47 +28,57 @@ try:
 #    pdb.set_trace()
     input_file_name = sys.argv[1]
     ast = compiler.parseFile(input_file_name)
-    mutils.print_debug('finished parsing')
-    mutils.print_debug(ast)
+    if debug:
+      mutils.print_debug('finished parsing')
+      mutils.print_debug(ast)
     
     ast = DeclassifyVisitor().preorder(ast)
-    mutils.print_debug('finished declassifying')
-    mutils.print_debug(ast)
+    if debug:
+      mutils.print_debug('finished declassifying')
+      mutils.print_debug(ast)
 
     ast = UniquifyVisitor().preorder(ast)
-    mutils.print_debug('finished uniquifying')
-    mutils.print_debug(ast)
+    if debug:
+      mutils.print_debug('finished uniquifying')
+      mutils.print_debug(ast)
 
     ast = ExplicateVisitor2().preorder(ast)
-    mutils.print_debug( 'finished explicating')
-    mutils.print_debug(PrintASTVisitor2().preorder(ast))
+    if debug:
+      mutils.print_debug( 'finished explicating')
+      mutils.print_debug(PrintASTVisitor2().preorder(ast))
     
-    mutils.print_debug('starting to heapify')
+      mutils.print_debug('starting to heapify')
     FreeInFunVisitor().preorder(ast)
     ast = HeapifyVisitor().preorder(ast)
-    mutils.print_debug('finished heapifying')
-    mutils.print_debug(PrintASTVisitor2().preorder(ast))
+    if debug:
+      mutils.print_debug('finished heapifying')
+      mutils.print_debug(PrintASTVisitor2().preorder(ast))
     
-    mutils.print_debug('type checking')
+      mutils.print_debug('type checking')
     TypeCheckVisitor2().preorder(ast)
 
-    mutils.print_debug('starting closure conversion')
+    if debug:
+      mutils.print_debug('starting closure conversion')
     ast = ClosureConversionVisitor().preorder(ast)
-    mutils.print_debug('finished closure conversion')
-    mutils.print_debug(PrintASTVisitor2().preorder(ast))
+    if debug:
+      mutils.print_debug('finished closure conversion')
+      mutils.print_debug(PrintASTVisitor2().preorder(ast))
     
-    mutils.print_debug('starting to flatten')
-    mutils.print_debug(ast,True)
+      mutils.print_debug('starting to flatten')
+      mutils.print_debug(ast,True)
     instrs = FlattenVisitor4().preorder(ast)
-    mutils.print_debug('finished flattening')
-    mutils.print_debug(PrintASTVisitor2().preorder(instrs))
+    if debug:
+      mutils.print_debug('finished flattening')
+      mutils.print_debug(PrintASTVisitor2().preorder(instrs))
 
     funs = InstrSelVisitor4().preorder(instrs)
     
-    mutils.print_debug('finished instruction selection')
+    if debug:
+      mutils.print_debug('finished instruction selection')
     for fun in funs:
         mutils.print_debug(PrintVisitor3().preorder(fun))
-    mutils.print_debug('starting register allocation')
+    if debug:
+      mutils.print_debug('starting register allocation')
 
     new_funs = []
     for fun in funs:
@@ -94,6 +104,7 @@ try:
 except EOFError:
     print "Could not open file %s." % sys.argv[1]
 except Exception, e:
-    print e.args[0]
+    print e
+    raise
     exit(-1)
 

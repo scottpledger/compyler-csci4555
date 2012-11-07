@@ -10,7 +10,7 @@ debug_mods = {
   'assigned_vars':debug_default,
   'build_interference':debug_default,
   'closure_conversion':debug_default,
-  'compile':True,
+  'compile':False,
   'compiler_utilities':debug_default,
   'explicate':debug_default,
   'explicit':debug_default,

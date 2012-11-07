@@ -23,7 +23,7 @@ class DeclassifyBodyFVVisitor(IVisitor):
     return specvars
   
   def visitAssName(self,n):
-    return [n.name]
+    return [n]
 
 class DeclassifyVisitor(IVisitor):
   
@@ -41,8 +41,9 @@ class DeclassifyVisitor(IVisitor):
     return Stmt(nodes)
     
   def visitAssign(self,n,parent=None,svars=[]):
-    if n.nodes[0].name in svars and not parent==None:
-      return Discard(CallFunc(Name('set_attr'),[parent,Const(n.nodes[0].name),self.dispatch(n.expr,parent,svars)], None,None ))
+    
+    if n.nodes[0] in svars and not parent==None:
+      return Discard(CallFunc(Name('set_attr'),[parent,n.nodes[0],self.dispatch(n.expr,parent,svars)], None,None ))
     if parent == None:
       return Assign([self.dispatch(cn,parent,svars) for cn in n.nodes],self.dispatch(n.expr,parent,svars))
     
@@ -74,4 +75,7 @@ class DeclassifyVisitor(IVisitor):
     
   
   def visitConst(self,n,parent=None,svars=[]):
+    return n
+  
+  def visitNode(self,n,parent=None,svars=[]):
     return n

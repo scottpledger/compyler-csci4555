@@ -1,4 +1,4 @@
- 
+
 class A:
     class B:
         x = 2
