@@ -5,12 +5,12 @@ import pprint
 
 debug_all = False
 
-debug_default = True
+debug_default = False
 debug_mods = {
   'assigned_vars':debug_default,
   'build_interference':debug_default,
   'closure_conversion':debug_default,
-  'compile':False,
+  'compile':True,
   'compiler_utilities':debug_default,
   'explicate':debug_default,
   'explicit':debug_default,
@@ -43,18 +43,18 @@ def prep_modname(modName):
   else:
     return modName.ljust(max_modname_len)
 
-def print_debug_ln(modName,line):
-  print '[%s] %s' % (prep_modname(modName), line)
+def print_debug_ln(modName,lineno,line):
+  print '[%s:%3d] %s' % (prep_modname(modName),lineno, line)
 
-def print_debug_obj(modName,msg):
+def print_debug_obj(modName,lineno,msg):
   if not isinstance(msg,basestring):
     fmted = pp.pformat(msg)
   else:
     fmted = msg
   for line in fmted.splitlines():
-    print_debug_ln(modName,line)
+    print_debug_ln(modName,lineno,line)
 
-def debug(msg=False):
+def debug(msg=False,force=False):
   frm = inspect.stack()[1]
   mod = inspect.getmodule(frm[0])
   modName,ext = os.path.splitext(mod.__file__)
@@ -62,12 +62,12 @@ def debug(msg=False):
   if modName in debug_mods:
     dbg = debug_mods[modName]
   
-  if dbg and msg:
-    print_debug_obj(modName,msg)
+  if (dbg or force) and msg:
+    print_debug_obj(modName,frm[2],msg)
   
   return dbg
 
-def print_debug(msg=False):
+def print_debug(msg=False,force=False):
   frm = inspect.stack()[1]
   mod = inspect.getmodule(frm[0])
   modName,ext = os.path.splitext(mod.__file__)
@@ -75,8 +75,8 @@ def print_debug(msg=False):
   if modName in debug_mods:
     dbg = debug_mods[modName]
   
-  if dbg and msg:
-    print_debug_obj(modName,msg)
+  if (dbg or force) and msg:
+    print_debug_obj(modName,frm[2],msg)
   
   return dbg
 

@@ -150,4 +150,5 @@ class UniquifyVisitor(Visitor):
         test = self.dispatch(n.test, renaming)
         body = self.dispatch(n.body, renaming)
         return While(test, body, n.else_)
+
         

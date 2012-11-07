@@ -34,5 +34,5 @@ class FindLocalsVisitor(Visitor):
     def visitClass(self, n):
         return set([n.name])
 
-    def visitFunction(self, n):
-        return set([n.name])
+    def visitCallFunc(self,n):
+        return set([])
