@@ -20,6 +20,7 @@ int gc_alloc_slab_counter = -1;
 int * start_pointers[1000] = {ROOT_SET_NULL};
 int * end_pointers[1000] = {ROOT_SET_NULL};
 int * alloc;
+int root_alloc = 0;
 
 
 
@@ -62,6 +63,18 @@ void* gc_alloc(gc_type_info *info)
 	
 	alloc = (int *)((int)alloc + size_in_bytes(info) + 8);             //move allocate to the end of the item you just put in
 	
+	while(root_set[root_alloc] != ROOT_SET_NULL && (root_alloc < ROOT_SET_LENGTH))
+		root_alloc++;
+	if(!(root_alloc < ROOT_SET_LENGTH))
+		root_alloc = 0;
+
+	while(root_set[root_alloc] != ROOT_SET_NULL && (root_alloc < ROOT_SET_LENGTH))
+		root_alloc++;
+	fprintf(stderr, "Fatal Error #1024. We're hosed");
+		return NULL;
+	
+	root_set[root_alloc] = alloc;
+
 	return (void *)((int)alloc - size_in_bytes(info));                 //return front of payload
 }
 
