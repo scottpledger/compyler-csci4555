@@ -96,7 +96,7 @@ int * gc_copy(int * node)                                                  //tak
 	if((int *)(((int *)node)[-1]) != NULL)                             //Check if it has been copied or not
 		return (void *)(((int *)node)[-1]);                            //Return address of where payload has been copied to
 		
-	void * new_node = gc_alloc((void *)(((int*)node)[-2]));            //Create new Block, saves pointer into new node
+	void * new_node = gc_alloc((gc_type_info *)(((int*)node)[-2]));            //Create new Block, saves pointer into new node
 	
 	memcpy(new_node, node,                                                //Copies over payload into new node
 			(size_t)size_in_bytes((gc_type_info *)(((int *)node)[-2])));
