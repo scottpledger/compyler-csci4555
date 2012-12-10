@@ -17,13 +17,18 @@ void *root_set[ROOT_SET_LENGTH] = {ROOT_SET_NULL};
 
 int gc_alloc_slab_counter = -1;
 
+int *start_pointers[1000] = {ROOT_SET_NULL};
+int *end_pointers[1000] = {ROOT_SET_NULL};
+
+int * alloc;
+int root_alloc = -1;
+
+/*
 int * start_pointers[1000];
 memset(start_pointers, NULL, 1000);
 int * end_pointers[1000];
 memset(end_pointers, NULL, 1000);
-int * alloc;
-int root_alloc = -1;
-
+*/
 
 
 void gc_init()
