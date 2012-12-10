@@ -18,19 +18,23 @@ void *root_set[ROOT_SET_LENGTH] = {ROOT_SET_NULL};
 int gc_alloc_slab_counter = -1;
 
 int * start_pointers[1000];
+memset(start_pointers, 0, 1000);
 int * end_pointers[1000];
+memset(end_pointers, 0, 1000);
 int * alloc;
+int root_alloc = -1;
 
 
 
 void gc_init()
 {
-	gc_alloc_slab_counter++;                                                                                
+	gc_alloc_slab_counter++;
+	while(start_pointers[gc_alloc_slab_counter] != 0) 	gc_alloc_slab_counter++;
 	if(gc_alloc_slab_counter > 999)           //rolls over to 0 "circular array"
 		gc_alloc_slab_counter = 0;
 	
 	int page_size = getpagesize();
-	int slab_size = page_size * 1000;
+	int slab_size = page_size * 10;
 
 	
 	start_pointers[gc_alloc_slab_counter] = (int *) mmap(NULL, slab_size, 
@@ -52,18 +56,34 @@ void* gc_alloc(gc_type_info *info)
 	  
 	if(!have_room(info))
 	{
-		gc_init();
+		gc_collect()
+		if(!have_room(info))
+			gc_init();
 		return gc_alloc(info);
 	}
+	
+		
 	alloc[0] = (int)info;                                              //use interger arithmatic, sets metadata for type
 	alloc[1] = (int)NULL;                                              //set meta data for copy pointer
 	
 	alloc = (int *)((int)alloc + size_in_bytes(info) + 8);             //move allocate to the end of the item you just put in
-	
-	return (void *)((int)alloc - size_in_bytes(info));                 //return front of payload
+
+	if(root_alloc <= ROOT_SET_LENGTH)
+	{
+		while(root_set[root_alloc] != ROOT_SET_NULL)
+			root_alloc++;
+		root_set[root_alloc] = (void *)((int)alloc - size_in_bytes(info));
+	} else
+	{
+		root_alloc = -1;
+		return gc_alloc(info);
+	}
+	return (void *)((int)alloc - size_in_bytes(info))
+
+	//return (void *)((int)alloc - size_in_bytes(info));                 //return front of payload
 }
 
-int * gc_copy(int * node)                                              //takes in ptr to payload
+int * gc_copy(int * node)                                                  //takes in ptr to payload
 {
 	if(node == NULL)                                                   //if no payload return NULL
 		return NULL;
@@ -83,7 +103,6 @@ int * gc_copy(int * node)                                              //takes i
 	*temp = (int)gc_copy(((int*)((int*)node)[1]));                     //recursive connecting
 	
 	return new_node;                                                   //return the address of the new_ payload
-	
 }
 
 
@@ -91,23 +110,18 @@ void gc_collect()
 {
 	int temp_gc_alloc_slab_counter = gc_alloc_slab_counter;
 	int page_size = getpagesize();
-	int slab_size = page_size * 1000;
+	int slab_size = page_size * 10;
 	int i, j;
 	gc_init();                                                         //grab new slab to make sure we dont overwrite
 	
-
-	
-	for(i = 0; root_set[i] != NULL; i++)                               //if there is something there
+	for(i = 0; i < ROOT_SET_LENGTH; i++)
 	{
-		root_set[i] = gc_copy(root_set[i]);                            //rootset = start of new linked list
+		if((int)root_set[i] > (int)start_pointers[temp_gc_alloc_slab_counter] && (int)root_set[i] < (int)end_pointers[temp_gc_alloc_slab_counter])
+			root_set[i] = gc_copy(root_set[i]);
 	}
 	
-	for(j = 0; j <= temp_gc_alloc_slab_counter; j++)
-	{
-		if(munmap(start_pointers[j], slab_size))                       //unmaps old slabs (nodes in the linked list)
+	if(munmap(start_pointers[temp_gc_alloc_slab_counter], slab_size))                       //unmaps old slab (nodes in the linked list)
 			printf("%s", "munmap error");
-
-	}
 }
 
 int size_in_bytes(gc_type_info *info)
@@ -120,4 +134,9 @@ int have_room(gc_type_info *info)
 	if(((int)alloc + size_in_bytes(info) + 8) > ((int)end_pointers[gc_alloc_slab_counter]))   //Calls size+8 for meta data. Looks at  and size. checks to see if theres room using alloc and endptr
 		return 0;                                                      //return false if no room
 	return 1;                                                          //return true if there is room
+}
+
+void gc_set_null(void * index)
+{
+	index = (int)NULL;
 }

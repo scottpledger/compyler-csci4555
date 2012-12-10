@@ -9,7 +9,7 @@
 int min(int x, int y) { return y < x ? y : x; }
 
 void* py_alloc(int o_size,int p_size,int num){
-  gc_type_info info = { .size_in_bytes = o_size + p_size*num, .pointers= {num} };
+  gc_type_info info = { .size_in_bytes = o_size, .pointers= {0} };
   return gc_alloc(&info);
 }
 
