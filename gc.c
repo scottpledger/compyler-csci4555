@@ -76,8 +76,9 @@ void* gc_alloc(gc_type_info *info)
 		//return gc_alloc(info);
 	}
     printf("=========STRT DEBUG SHIT========\nstart_pointer[%d]: %d\nalloc: %d\nalloc[0]:%d\nalloc[1]:%d\n==========END DEBUG SHIT==========\n",gc_alloc_slab_counter,start_pointers[gc_alloc_slab_counter],alloc,alloc[0],alloc[1]);
-	alloc[0] = (int)info;                                              //use interger arithmatic, sets metadata for type
-	alloc[1] = (int)NULL;                                              //set meta data for copy pointer
+	alloc* = info;   
+	alloc1 = alloc+4;                                           //use interger arithmatic, sets metadata for type
+	alloc1* = NULL;                                              //set meta data for copy pointer
 	printf("=========STRT DEBUG SHIT========\nstart_pointer[%d]: %d\nalloc: %d\nalloc[0]:%d\nalloc[1]:%d\n==========END DEBUG SHIT==========\n",gc_alloc_slab_counter,start_pointers[gc_alloc_slab_counter],alloc,alloc[0],alloc[1]);
 	alloc = (int *)((int)alloc + size_in_bytes(info) + 8);             //move allocate to the end of the item you just put in
 
