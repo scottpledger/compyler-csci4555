@@ -198,7 +198,7 @@ pyobj input_int() {
 
 static big_pyobj* list_to_big(list l) {
   //big_pyobj* v = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   v->tag = LIST;
   v->u.l = l;
   return v;
@@ -208,7 +208,7 @@ big_pyobj* create_list(pyobj length) {
   list l;
   l.len = project_int(length); /* this should be checked */
   //l.data = (pyobj*)malloc(sizeof(pyobj) * l.len);
-  l.data = (pyobj*)py_alloc(sizeof(pyobj) * l.len,sizeof(pyobj*),1);
+  l.data = (pyobj*)py_alloc(sizeof(pyobj) * l.len);
   return list_to_big(l);
 }
 
@@ -282,7 +282,7 @@ static void print_dict(pyobj dict)
 	      list a;
 	      a.len = 1;
 	      //a.data = (pyobj*)malloc(sizeof(pyobj) * a.len);
-          a.data = (pyobj*)py_alloc(sizeof(pyobj) * a.len,sizeof(pyobj*),1);
+          a.data = (pyobj*)py_alloc(sizeof(pyobj) * a.len);
 	      a.data[0] = dict;
 	      /* Yuk, concatenating (adding) lists is slow! */
 	      printing_list = list_add(printing_list, a);
@@ -503,7 +503,7 @@ static int equal_any(void* a, void* b)
 big_pyobj* create_dict()
 {
   //big_pyobj* v = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   v->tag = DICT;
   v->u.d = create_hashtable(4, hash_any, equal_any);
   return v;
@@ -518,10 +518,10 @@ static pyobj* dict_subscript(dict d, pyobj key)
     return (pyobj*)p;
   else {
     //pyobj* k = (pyobj*) malloc(sizeof(pyobj));
-    pyobj* k = (pyobj*) py_alloc(sizeof(pyobj),sizeof(pyobj*),1);
+    pyobj* k = (pyobj*) py_alloc(sizeof(pyobj));
     *k = key;
     //pyobj* v = (pyobj*) malloc(sizeof(pyobj));
-    pyobj* v = (pyobj*) py_alloc(sizeof(pyobj),sizeof(pyobj*),1);
+    pyobj* v = (pyobj*) py_alloc(sizeof(pyobj));
     *v = inject_int(444);
     hashtable_insert(d, k, v);
     return v;
@@ -629,7 +629,7 @@ static list list_add(list a, list b)
 {
   list c;
   c.len = a.len + b.len;
-  c.data = (pyobj*)malloc(sizeof(pyobj) * c.len);
+  c.data = (pyobj*)malloc(sizeof(pyobj) * c.len);//malloccall
   int i;
   for (i = 0; i != a.len; ++i)
     c.data[i] = a.data[i];
@@ -777,7 +777,7 @@ int is_true(pyobj v)
 
 static big_pyobj* closure_to_big(function f) {
   //big_pyobj* v = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   v->tag = FUN;
   v->u.f = f;
   return v;
@@ -830,7 +830,7 @@ static int attrname_equal(void *a, void *b)
 big_pyobj* create_class(pyobj bases)
 {
   //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = CLASS;
   ret->u.cl.attrs = create_hashtable(2, attrname_hash, attrname_equal);
 
@@ -840,7 +840,7 @@ big_pyobj* create_class(pyobj bases)
       int i;
       ret->u.cl.nparents = basesp->u.l.len;
       //ret->u.cl.parents = (class*)malloc(sizeof(class) * ret->u.cl.nparents);
-      ret->u.cl.parents = (class*)py_alloc(sizeof(class) * ret->u.cl.nparents,sizeof(class*),ret->u.cl.nparents);
+      ret->u.cl.parents = (class*)py_alloc(sizeof(class) * ret->u.cl.nparents);
       for (i = 0; i != ret->u.cl.nparents; ++i) {
 	  pyobj* parent = &basesp->u.l.data[i];
 	  if (tag(*parent) == BIG_TAG && project_big(*parent)->tag == CLASS)
@@ -859,7 +859,7 @@ big_pyobj* create_class(pyobj bases)
 /* we leave calling the __init__ function for a separate step. */
 big_pyobj* create_object(pyobj cl) {
   //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = OBJECT;
   big_pyobj* clp = project_big(cl);
   if (clp->tag == CLASS)
@@ -899,7 +899,7 @@ static pyobj* attrsearch(class cl, char* attr) {
 
 static big_pyobj* create_bound_method(object receiver, function f) {
   //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = BMETHOD;
   ret->u.bm.fun = f;
   ret->u.bm.receiver = receiver;
@@ -908,7 +908,7 @@ static big_pyobj* create_bound_method(object receiver, function f) {
 
 static big_pyobj* create_unbound_method(class cl, function f) {
   //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = UBMETHOD;
   ret->u.ubm.fun = f;
   ret->u.ubm.cl = cl;
@@ -962,7 +962,7 @@ int inherits(pyobj c1, pyobj c2) {
 big_pyobj* get_class(pyobj o)
 {
   //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = CLASS;
 
   big_pyobj* b = project_big(o);
@@ -983,7 +983,7 @@ big_pyobj* get_class(pyobj o)
 big_pyobj* get_receiver(pyobj o)
 {
   //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = OBJECT;
   big_pyobj* b = project_big(o);
   switch (b->tag) {
@@ -1000,7 +1000,7 @@ big_pyobj* get_receiver(pyobj o)
 big_pyobj* get_function(pyobj o)
 {
   //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj),sizeof(big_pyobj*),1);
+  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = FUN;
   big_pyobj* b = project_big(o);
   switch (b->tag) {
@@ -1052,9 +1052,9 @@ pyobj set_attr(pyobj obj, char* attr, pyobj val)
 {
     char* k;
     pyobj* v;
-    k = (char *)malloc(strlen(attr)+1);
+    k = (char *)malloc(strlen(attr)+1);//malloccall
     //k = (char *)py_alloc(sizeof(char)*strlen(attr)+1,sizeof(char *),1);
-    v = (pyobj *)malloc(sizeof(pyobj));
+    v = (pyobj *)malloc(sizeof(pyobj));//malloccall
     //v = (pyobj *)py_alloc(sizeof(pyobj),sizeof(pyobj*),2); // I dunno why it doesn't work here, but it doesn't.
     strcpy(k, attr);
     *v = val;
