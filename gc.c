@@ -24,15 +24,16 @@ int root_alloc = 0;
 
 
 
+
+
 void gc_init()
 {
 	gc_alloc_slab_counter++;                                                                                
 	if(gc_alloc_slab_counter > 999)           //rolls over to 0 "circular array"
 		gc_alloc_slab_counter = 0;
-	
+
 	int page_size = getpagesize();
 	int slab_size = page_size * 1000;
-
 	
 	start_pointers[gc_alloc_slab_counter] = (int *) mmap(NULL, slab_size, 
 		  			PROT_READ | PROT_WRITE, 
@@ -63,17 +64,10 @@ void* gc_alloc(gc_type_info *info)
 	
 	alloc = (int *)((int)alloc + size_in_bytes(info) + 8);             //move allocate to the end of the item you just put in
 	
-	while(root_set[root_alloc] != ROOT_SET_NULL && (root_alloc < ROOT_SET_LENGTH))
-		root_alloc++;
-	if(!(root_alloc < ROOT_SET_LENGTH))
-		root_alloc = 0;
-
-	while(root_set[root_alloc] != ROOT_SET_NULL && (root_alloc < ROOT_SET_LENGTH))
-		root_alloc++;
-	fprintf(stderr, "Fatal Error #1024. We're hosed");
-		return NULL;
-	
 	root_set[root_alloc] = alloc;
+	root_alloc++;
+	if(!(root_alloc < ROOT_SET_LENGTH))
+		printf(stderr, "too many objects");
 
 	return (void *)((int)alloc - size_in_bytes(info));                 //return front of payload
 }
@@ -105,12 +99,11 @@ int * gc_copy(int * node)                                              //takes i
 void gc_collect()
 {
 	int temp_gc_alloc_slab_counter = gc_alloc_slab_counter;
-	int page_size = getpagesize();
-	int slab_size = page_size * 1000;
-	int i, j;
-	gc_init();                                                         //grab new slab to make sure we dont overwrite
 	
-
+	int i, j;
+	gc_init();     
+	int page_size = getpagesize();
+	int slab_size = page_size * 1000;                                                    //grab new slab to make sure we dont overwrite
 	
 	for(i = 0; i < ROOT_SET_LENGTH; i++)                               //if there is something there
 	{
@@ -139,5 +132,16 @@ int have_room(gc_type_info *info)
 
 void gc_nullify(int * index)
 {
-	index[0] = NULL;
+	index[0] = (int)NULL;
+}
+
+void gc_collet_all()
+{
+	int page_size = getpagesize();
+	int slab_size = page_size * 1000;
+	int i;
+	for(i = 0; i < 1000; i++)
+	{
+		munmap(start_pointers[i], slab_size);
+	}
 }

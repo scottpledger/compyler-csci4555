@@ -27,7 +27,7 @@ GCC_INCLUDES= -I. ${RUNTIME_HDRS}
 GCC_LINKS = -L. -lcompyler -lm
 
 %.o: %.c
-	gcc -c -fPIC -m32 $*.c -o $*.o
+	gcc -c -fPIC -m32 -g $*.c -o $*.o
 	
 runtime-files: ${RUNTIME_FILES_LIB}
 	gcc -shared -m32 -lm -Wl,--as-needed,-soname,libcompyler.so -o libcompyler.so  ${RUNTIME_FILES_LIB}

@@ -101,5 +101,6 @@ extern int have_room(gc_type_info *);
 //
 extern int * gc_copy(int *);
 
+extern void gc_collect_all();
 
 #endif
