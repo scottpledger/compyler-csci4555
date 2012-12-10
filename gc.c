@@ -66,7 +66,6 @@ void* gc_alloc(gc_type_info *info)
 			gc_init();
 		return gc_alloc(info);
 	}
-	
 		
 	alloc[0] = (int)info;                                              //use interger arithmatic, sets metadata for type
 	alloc[1] = (int)NULL;                                              //set meta data for copy pointer
@@ -75,6 +74,7 @@ void* gc_alloc(gc_type_info *info)
 
 	if(root_alloc <= ROOT_SET_LENGTH)
 	{
+		root_alloc++;
 		while(root_set[root_alloc] != ROOT_SET_NULL)
 			root_alloc++;
 		root_set[root_alloc] = (void *)((int)alloc - size_in_bytes(info));
