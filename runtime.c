@@ -833,8 +833,8 @@ big_pyobj* create_class(pyobj bases)
   case LIST: {
       int i;
       ret->u.cl.nparents = basesp->u.l.len;
-      //ret->u.cl.parents = (class*)malloc(sizeof(class) * ret->u.cl.nparents);
-      ret->u.cl.parents = (class*)py_alloc(sizeof(class) * ret->u.cl.nparents);
+      ret->u.cl.parents = (class*)malloc(sizeof(class) * ret->u.cl.nparents);
+      //ret->u.cl.parents = (class*)py_alloc(sizeof(class) * ret->u.cl.nparents);
       for (i = 0; i != ret->u.cl.nparents; ++i) {
 	  pyobj* parent = &basesp->u.l.data[i];
 	  if (tag(*parent) == BIG_TAG && project_big(*parent)->tag == CLASS)
