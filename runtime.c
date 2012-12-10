@@ -8,12 +8,6 @@
 
 int min(int x, int y) { return y < x ? y : x; }
 
-void* py_alloc(int o_size){
-  gc_type_info info = { .size_in_bytes = o_size, .pointers = {0}, .tenured = 0 };
-  return gc_alloc(&info);
-}
-
-
 /* Some forward declarations */
 static int equal_pyobj(pyobj a, pyobj b);
 static void print_float(double in);
@@ -776,8 +770,8 @@ int is_true(pyobj v)
 /* Support for Functions */
 
 static big_pyobj* closure_to_big(function f) {
-  //big_pyobj* v = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj));
+  big_pyobj* v = (big_pyobj*)malloc(sizeof(big_pyobj));
+  //big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   v->tag = FUN;
   v->u.f = f;
   return v;
@@ -858,8 +852,8 @@ big_pyobj* create_class(pyobj bases)
 
 /* we leave calling the __init__ function for a separate step. */
 big_pyobj* create_object(pyobj cl) {
-  //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
+  big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
+  //big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = OBJECT;
   big_pyobj* clp = project_big(cl);
   if (clp->tag == CLASS)
