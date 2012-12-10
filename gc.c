@@ -15,13 +15,13 @@
 
 void *root_set[ROOT_SET_LENGTH] = {ROOT_SET_NULL};
 
-int gc_alloc_slab_counter = -1;
+int gc_alloc_slab_counter = 0;
 
 int *start_pointers[1000] = {ROOT_SET_NULL};
 int *end_pointers[1000] = {ROOT_SET_NULL};
 
 int * alloc;
-int root_alloc = -1;
+int root_alloc = 0;
 
 /*
 int * start_pointers[1000];
@@ -33,7 +33,6 @@ memset(end_pointers, NULL, 1000);
 
 void gc_init()
 {
-	gc_alloc_slab_counter++;
 	while(start_pointers[gc_alloc_slab_counter] != 0) 	gc_alloc_slab_counter++;
 	if(gc_alloc_slab_counter > 999)           //rolls over to 0 "circular array"
 		gc_alloc_slab_counter = 0;
@@ -72,15 +71,14 @@ void* gc_alloc(gc_type_info *info)
 	
 	alloc = (int *)((int)alloc + size_in_bytes(info) + 8);             //move allocate to the end of the item you just put in
 
-	if(root_alloc <= ROOT_SET_LENGTH)
+	if(root_alloc < ROOT_SET_LENGTH)
 	{
-		root_alloc++;
 		while(root_set[root_alloc] != ROOT_SET_NULL)
 			root_alloc++;
 		root_set[root_alloc] = (void *)((int)alloc - size_in_bytes(info));
 	} else
 	{
-		root_alloc = -1;
+		root_alloc = 0;
 		return gc_alloc(info);
 	}
 	return (void *)((int)alloc - size_in_bytes(info));
