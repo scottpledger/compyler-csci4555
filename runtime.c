@@ -207,8 +207,8 @@ static big_pyobj* list_to_big(list l) {
 big_pyobj* create_list(pyobj length) {
   list l;
   l.len = project_int(length); /* this should be checked */
-  //l.data = (pyobj*)malloc(sizeof(pyobj) * l.len);
-  l.data = (pyobj*)py_alloc(sizeof(pyobj) * l.len);
+  l.data = (pyobj*)malloc(sizeof(pyobj) * l.len);
+  //l.data = (pyobj*)py_alloc(sizeof(pyobj) * l.len);
   return list_to_big(l);
 }
 
