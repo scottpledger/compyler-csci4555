@@ -97,7 +97,7 @@ void gc_collect()
 	
 
 	
-	for(i = 0; root_set[i] != NULL; i++)                               //if there is something there
+	for(i = 0; i < ROOT_SET_LENGTH; i++)                               //if there is something there
 	{
 		root_set[i] = gc_copy(root_set[i]);                            //rootset = start of new linked list
 	}
@@ -120,4 +120,9 @@ int have_room(gc_type_info *info)
 	if(((int)alloc + size_in_bytes(info) + 8) > ((int)end_pointers[gc_alloc_slab_counter]))   //Calls size+8 for meta data. Looks at  and size. checks to see if theres room using alloc and endptr
 		return 0;                                                      //return false if no room
 	return 1;                                                          //return true if there is room
+}
+
+void gc_nullify(int * index)
+{
+	index[0] = NULL;
 }

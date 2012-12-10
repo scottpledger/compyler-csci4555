@@ -40,6 +40,8 @@ typedef struct {
 } gc_type_info;
 
 
+void gc_nullify(int * index);
+
 //
 // The gc_init() routine should be called before anything is allocated.
 // This is used to initialize your code & data structures.
