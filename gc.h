@@ -1,142 +1,107 @@
+#ifndef _gc_h_
+#define _gc_h_
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/mman.h>
-#include <sys/resource.h>
-#include <unistd.h>
-#include <string.h>
-#include "gc.h"
+#include <assert.h>
 
 //
-// This file defines the "skeleton" of your garbage collector
-// implementation. This version simply uses 'malloc' to
-// allocate storage (not a good solution)
+// These definitions describe the "root set" or the pointers
+// into the allocated heap.
+//
+// We define a limited number of pointers into the root set
+// and in general, a system would identify global and local
+// variables that are pointers.
 //
 
-
-void *root_set[ROOT_SET_LENGTH] = {ROOT_SET_NULL};
-
-int gc_alloc_slab_counter = -1;
-
-int * start_pointers[1000];
-memset(start_pointers, 0, 1000);
-int * end_pointers[1000];
-memset(end_pointers, 0, 1000);
-int * alloc;
-int root_alloc = -1;
-
-
-
-void gc_init()
-{
-	gc_alloc_slab_counter++;
-	while(start_pointers[gc_alloc_slab_counter] != 0) 	gc_alloc_slab_counter++;
-	if(gc_alloc_slab_counter > 999)           //rolls over to 0 "circular array"
-		gc_alloc_slab_counter = 0;
-	
-	int page_size = getpagesize();
-	int slab_size = page_size * 10;
-
-	
-	start_pointers[gc_alloc_slab_counter] = (int *) mmap(NULL, slab_size, 
-		  			PROT_READ | PROT_WRITE, 
-		 		 	MAP_ANON | MAP_PRIVATE,
-		  			0, 0);
-	end_pointers[gc_alloc_slab_counter] = (int *)((int)start_pointers[gc_alloc_slab_counter] + slab_size);
-	alloc = start_pointers[gc_alloc_slab_counter];
-}
+#define ROOT_SET_LENGTH 1024
+#define ROOT_SET_NULL   NULL
+extern void *root_set[ROOT_SET_LENGTH];
 
 //
-// This lamest of lame allocators simply allocates new space.
-// If there isn't enough space, we allocate a new slab
+// Each object that is allocated is marked with a specific "type"
+// The type indicates the size of the object and offset of up
+// to 16 pointers in the object. The location of the pointers
+// is expressed using an offset from the (user) part of the
+// object in terms of integratl 4-byte offsets. For example,
+// 0 means 0 bytes, 1 means 4 bytes, 2 means 8 bytes and so on.
 //
 
-void* gc_alloc(gc_type_info *info)
+#define GC_TYPE_INFO_MAX_POINTERS 16
+typedef struct {
+  int size_in_bytes;  
+  int pointers[GC_TYPE_INFO_MAX_POINTERS];
+  int tenured;
+  //
+  // you can add additional fields to the gc_type_info as you
+  // see fit. Some example might include pointers for a
+  // freelist of items (should that be useful).
+  //
+} gc_type_info;
+
+
+//
+// The gc_init() routine should be called before anything is allocated.
+// This is used to initialize your code & data structures.
+//
+extern void gc_init();
+
+
+//
+// Allocate an object of the appropriate type and return a pointer to
+// the user portion of the space. The returned address should be
+// aligned for a double (i.e. 8 byte aligned).
+//
+extern void *gc_alloc(gc_type_info *);
+
+
+//
+// This routine inserts a check that the returned item is 8-byte aligned
+// (the bottom 3 bits are zero);
+// 
+static inline void *gc_alloc_check(gc_type_info *info)
 {
-	//return malloc(info -> size_in_bytes);
-	  
-	if(!have_room(info))
-	{
-		gc_collect()
-		if(!have_room(info))
-			gc_init();
-		return gc_alloc(info);
-	}
-	
-		
-	alloc[0] = (int)info;                                              //use interger arithmatic, sets metadata for type
-	alloc[1] = (int)NULL;                                              //set meta data for copy pointer
-	
-	alloc = (int *)((int)alloc + size_in_bytes(info) + 8);             //move allocate to the end of the item you just put in
-
-	if(root_alloc <= ROOT_SET_LENGTH)
-	{
-		while(root_set[root_alloc] != ROOT_SET_NULL)
-			root_alloc++;
-		root_set[root_alloc] = (void *)((int)alloc - size_in_bytes(info));
-	} else
-	{
-		root_alloc = -1;
-		return gc_alloc(info);
-	}
-	return (void *)((int)alloc - size_in_bytes(info))
-
-	//return (void *)((int)alloc - size_in_bytes(info));                 //return front of payload
-}
-
-int * gc_copy(int * node)                                                  //takes in ptr to payload
-{
-	if(node == NULL)                                                   //if no payload return NULL
-		return NULL;
-	
-	if((int *)(((int *)node)[-1]) != NULL)                             //Check if it has been copied or not
-		return (void *)(((int *)node)[-1]);                            //Return address of where payload has been copied to
-		
-	void * new_node = gc_alloc((void *)(((int*)node)[-2]));            //Create new Block, saves pointer into new node
-	
-	memcpy(new_node, node,                                                //Copies over payload into new node
-			(size_t)size_in_bytes((gc_type_info *)(((int *)node)[-2])));
-	
-	int * temp = &((int*)node)[-1];                                    //sets the meta data of the old payload
-	*temp = (int)new_node;                                             //to the address of the new payload
-	
-	temp = &((int*)new_node)[1];                                       //connects the new nodes
-	*temp = (int)gc_copy(((int*)((int*)node)[1]));                     //recursive connecting
-	
-	return new_node;                                                   //return the address of the new_ payload
+  void *ret = gc_alloc(info);
+  int iret = (int) ret;
+  if ( (iret & 0x7) != 0 ) {
+    fprintf(stderr,"Allocation of object not 8-byte aligned\n");
+    exit(1);
+  }
+  return ret;
 }
 
 
-void gc_collect()
-{
-	int temp_gc_alloc_slab_counter = gc_alloc_slab_counter;
-	int page_size = getpagesize();
-	int slab_size = page_size * 10;
-	int i, j;
-	gc_init();                                                         //grab new slab to make sure we dont overwrite
-	
-	for(i = 0; i < ROOT_SET_LENGTH; i++)
-	{
-		if((int)root_set[i] > (int)start_pointers[temp_gc_alloc_slab_counter] && (int)root_set[i] < (int)end_pointers[temp_gc_alloc_slab_counter])
-			root_set[i] = gc_copy(root_set[i]);
-	}
-	
-	if(munmap(start_pointers[temp_gc_alloc_slab_counter], slab_size))                       //unmaps old slab (nodes in the linked list)
-			printf("%s", "munmap error");
-}
+//
+// Start a collection phase. This can be called by the user program
+// but your garbage collector is free to do whatever it wants when
+// this is called.
+//
+extern void gc_collect();
 
-int size_in_bytes(gc_type_info *info)
-{
-	return ((info->size_in_bytes + 7) - (info->size_in_bytes + 7) % 8);//makes it 8 byte alligned without metadata, useful for functions like memcopy
-}
 
-int have_room(gc_type_info *info)
-{
-	if(((int)alloc + size_in_bytes(info) + 8) > ((int)end_pointers[gc_alloc_slab_counter]))   //Calls size+8 for meta data. Looks at  and size. checks to see if theres room using alloc and endptr
-		return 0;                                                      //return false if no room
-	return 1;                                                          //return true if there is room
-}
+//
+// Returns an eight byte alligned size value based on the size value
+// in passed gc_type_info *
+//
+extern int size_in_bytes(gc_type_info *);
 
-void gc_set_null(void * index)
-{
-	index = (int)NULL;
-}
+
+//
+// returns 1 if there is enough room for payload + type meta-data
+// returns 0 if not
+//
+extern int have_room(gc_type_info *);
+
+
+//
+// takes pointer to an object, copys that object to heap, then returns
+// the new pointer to that object
+//
+extern int * gc_copy(int *);
+
+//
+// used by outside programs to nullify a root_set element
+//
+extern void gc_set_null(void * index);
+
+#endif
