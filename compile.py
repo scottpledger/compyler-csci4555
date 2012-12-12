@@ -15,7 +15,7 @@ from flatten import FlattenVisitor4
 from instruction_selection import InstrSelVisitor4
 from register_alloc import RegisterAlloc3
 from print_visitor import PrintVisitor3
-from generate_x86 import GenX86Visitor3
+from generate_x86 import GenX86Visitor4,string_constants
 from generate_x86 import fun_prefix
 from remove_structured_control import RemoveStructuredControl
 from uniquify import UniquifyVisitor
@@ -95,11 +95,16 @@ try:
         for fun in funs:
             mutils.print_debug( PrintVisitor3().preorder(fun))
 
-    x86 = GenX86Visitor3().preorder(Stmt(funs))
+    x86 = GenX86Visitor4().preorder(Stmt(funs))
     mutils.print_debug('finished generating x86')
+    
+    x86_data = ".DATA\n"
+    for key in string_constants.keys():
+      x86_data += "%s DB '%s',0\n" %(key,string_constants[key])
+    
 
     asm_file = open(splitext(input_file_name)[0] + '.s', 'w')
-    print >>asm_file, ('.globl %smain' % fun_prefix) + x86
+    print >>asm_file, ('%s\n.globl %smain' % (x86_data,fun_prefix)) + x86
 
 except EOFError:
     print "Could not open file %s." % sys.argv[1]

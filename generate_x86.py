@@ -195,4 +195,11 @@ class GenX86Visitor3(GenX86Visitor2):
         else:
             return '$%d' % n.value
 
-
+class GenX86Visitor4(GenX86Visitor3):
+    def visitModule(self,n):
+      x86_str = GenX86Visitor3.visitModule(self,n)
+      out_str = ".DATA\n"
+      for key in string_constants.keys():
+        out_str += "%s DB '%s',0\n" %(key,string_constants[key])
+      out_str += x86_str
+      return out_str
