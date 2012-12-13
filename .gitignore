@@ -10,3 +10,6 @@
 tmp/*
 parser.out
 parsetab.py
+*.bin
+*.o
+*.so
