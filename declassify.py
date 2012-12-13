@@ -3,6 +3,7 @@ import compiler_utilities
 from compiler.ast import *
 from compiler.consts import *
 from vis import IVisitor
+from vis import Visitor
 from explicit import Let
 import mutils
 
@@ -60,7 +61,7 @@ class DeclassifyBodyFVVisitor(IVisitor):
   def visitAssName(self,n):
     return [n]
 
-class DeclassifyVisitor(IVisitor):
+class DeclassifyVisitor(Visitor):
   
   def visitModule(self,n):
     return Module(n.doc,self.dispatch(n.node))
@@ -76,11 +77,18 @@ class DeclassifyVisitor(IVisitor):
     return Stmt(nodes)
     
   def visitAssign(self,n,parent=None,svars=[]):
-    
     if n.nodes[0] in svars and not parent==None:
       return Discard(CallFunc(Name('set_attr'),[parent,Const(get_assignment_name(n.nodes[0])),self.dispatch(n.expr,parent,svars)], None,None ))
     if parent == None:
       return Assign([self.dispatch(cn,parent,svars) for cn in n.nodes],self.dispatch(n.expr,parent,svars))
+    else:
+      #we has a parent!
+      an = n.nodes[0]
+      print "visitAssign( %s, %s, %s )"%(n,parent,svars)
+      if(isinstance(an,AssAttr)):
+        return Discard(CallFunc(Name('set_attr'),[an.expr,Const(an.attrname),self.dispatch(n.expr)], None,None ))
+      else:
+        return Assign([self.dispatch(cn,parent,svars) for cn in n.nodes],self.dispatch(n.expr,parent,svars))
     
   def visitAssName(self,n,parent=None,svars=[]):
     if n.name in svars:
@@ -93,7 +101,7 @@ class DeclassifyVisitor(IVisitor):
       return n
     elif n.name in svars:
       tmp = compiler_utilities.generate_name('class_func')
-      return [Function(n.decorators,tmp,n.argnames,n.defaults,n.flags,n.doc,n.code), \
+      return [Function(n.decorators,tmp,n.argnames,n.defaults,n.flags,n.doc,self.dispatch(n.code,parent,svars)), \
               Discard(CallFunc(Name('set_attr'),[parent,Const(n.name),Name(tmp)], None,None ))]
   
   def visitClass(self,n,parent=None,svars=[]):
@@ -102,8 +110,11 @@ class DeclassifyVisitor(IVisitor):
     #n.code
     cvars = DeclassifyBodyFVVisitor().preorder(n.code)
     tmp = compiler_utilities.generate_name('class_var')
+    print n.code
+    nds = self.dispatch(n.code,Name(tmp),cvars)
+    print nds
     return [Assign([AssName(tmp, 'OP_ASSIGN')], CallFunc(Name('create_class'), list(n.bases), None, None))]+\
-           self.dispatch(n.code,Name(tmp),cvars).nodes + \
+           [nds] + \
            [Assign([AssName(n.name, 'OP_ASSIGN')],Name(tmp))]
     
   
@@ -114,7 +125,16 @@ class DeclassifyVisitor(IVisitor):
     return Printnl([self.dispatch(cn,parent,svars) for cn in n.nodes],n.dest)
   
   def visitGetattr(self,n,parent=None,svars=[]):
+    print "visitGetattr( %s, %s, %s )"%(n,parent,svars)
     return CallFunc(Name('get_attr'),[n.expr,Const(n.attrname)],None,None)
   
   def visitNode(self,n,parent=None,svars=[]):
     return n
+    
+  def visitCallFunc(self, n, parent=None, svars=[]):
+    return n
+  
+  def visitSubscript(self, n, parent=None, svars=[]):
+    return Subscript(self.dispatch(n.expr,parent,svars),n.flags,n.subs)
+  def visitList(self,n,parent=None,svars=[]):
+    return List([self.dispatch(cn,parent,svars) for cn in n.nodes])

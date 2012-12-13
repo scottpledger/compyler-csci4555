@@ -98,9 +98,10 @@ try:
     x86 = GenX86Visitor4().preorder(Stmt(funs))
     mutils.print_debug('finished generating x86')
     
-    x86_data = ".DATA\n"
+    x86_data = "\n"
     for key in string_constants.keys():
-      x86_data += "%s DB '%s',0\n" %(key,string_constants[key])
+      x86_data += "%s:\n .ascii \"%s\\10\\0\"\n" %(key,string_constants[key])
+    
     
 
     asm_file = open(splitext(input_file_name)[0] + '.s', 'w')
