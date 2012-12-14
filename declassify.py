@@ -59,7 +59,7 @@ class DeclassifyBodyFVVisitor(IVisitor):
     return specvars
   
   def visitAssName(self,n):
-    return [n]
+    return [n,n.name]
 
 class DeclassifyVisitor(Visitor):
   
@@ -77,16 +77,23 @@ class DeclassifyVisitor(Visitor):
     return Stmt(nodes)
     
   def visitAssign(self,n,parent=None,svars=[]):
-    if n.nodes[0] in svars and not parent==None:
+    an = n.nodes[0]
+    if isinstance(n.nodes[0],AssAttr):
+      return Discard(CallFunc(Name('set_attr'),[self.dispatch(an.expr,parent,svars),Const(an.attrname),self.dispatch(n.expr,parent,svars)], None,None))
+    if get_assignment_name(n.nodes[0]) in svars and not parent==None:
+      return Discard(CallFunc(Name('set_attr'),[parent,Const(get_assignment_name(n.nodes[0])),self.dispatch(n.expr,parent,svars)], None,None ))
+    elif n in svars and not parent==None:
       return Discard(CallFunc(Name('set_attr'),[parent,Const(get_assignment_name(n.nodes[0])),self.dispatch(n.expr,parent,svars)], None,None ))
     if parent == None:
-      return Assign([self.dispatch(cn,parent,svars) for cn in n.nodes],self.dispatch(n.expr,parent,svars))
+      
+      if isinstance(an,AssAttr):
+        return Discard(CallFunc(Name('set_attr'),[an.expr,Const(an.attrname),self.dispatch(n.expr,parent,svars)], None,None))
+      else:
+        return Assign([self.dispatch(cn,parent,svars) for cn in n.nodes],self.dispatch(n.expr,parent,svars))
     else:
       #we has a parent!
-      an = n.nodes[0]
-      print "visitAssign( %s, %s, %s )"%(n,parent,svars)
       if(isinstance(an,AssAttr)):
-        return Discard(CallFunc(Name('set_attr'),[an.expr,Const(an.attrname),self.dispatch(n.expr)], None,None ))
+        return Discard(CallFunc(Name('set_attr'),[an.expr,Const(get_assignment_name(an.attrname)),self.dispatch(n.expr,parent,svars)], None,None ))
       else:
         return Assign([self.dispatch(cn,parent,svars) for cn in n.nodes],self.dispatch(n.expr,parent,svars))
     
@@ -98,7 +105,7 @@ class DeclassifyVisitor(Visitor):
 
   def visitFunction(self,n,parent=None,svars=[]):
     if parent==None:
-      return n
+      return Function(n.decorators,n.name,n.argnames,n.defaults,n.flags,n.doc,self.dispatch(n.code,parent,svars))
     elif n.name in svars:
       tmp = compiler_utilities.generate_name('class_func')
       return [Function(n.decorators,tmp,n.argnames,n.defaults,n.flags,n.doc,self.dispatch(n.code,parent,svars)), \
@@ -110,9 +117,7 @@ class DeclassifyVisitor(Visitor):
     #n.code
     cvars = DeclassifyBodyFVVisitor().preorder(n.code)
     tmp = compiler_utilities.generate_name('class_var')
-    print n.code
     nds = self.dispatch(n.code,Name(tmp),cvars)
-    print nds
     return [Assign([AssName(tmp, 'OP_ASSIGN')], CallFunc(Name('create_class'), list(n.bases), None, None))]+\
            [nds] + \
            [Assign([AssName(n.name, 'OP_ASSIGN')],Name(tmp))]
@@ -125,16 +130,65 @@ class DeclassifyVisitor(Visitor):
     return Printnl([self.dispatch(cn,parent,svars) for cn in n.nodes],n.dest)
   
   def visitGetattr(self,n,parent=None,svars=[]):
-    print "visitGetattr( %s, %s, %s )"%(n,parent,svars)
-    return CallFunc(Name('get_attr'),[n.expr,Const(n.attrname)],None,None)
+    return CallFunc(Name('get_attr'),[self.dispatch(n.expr,parent,svars),Const(n.attrname)],None,None)
   
   def visitNode(self,n,parent=None,svars=[]):
     return n
-    
-  def visitCallFunc(self, n, parent=None, svars=[]):
+  
+  def visitName(self, n, parent=None, svars=[]):
+    if n.name in svars:
+      return CallFunc(Name('get_attr'),[parent,Const(n.name)],None,None)
     return n
+  
+  def visitDiscard(self, n, parent=None, svars=[]):
+    return Discard(self.dispatch(n.expr,parent,svars))
+  
+  def visitCallFunc(self, n, parent=None, svars=[]):
+    return CallFunc(self.dispatch(n.node,parent,svars),[self.dispatch(arg,parent,svars) for arg in n.args],n.star_args,n.dstar_args)
   
   def visitSubscript(self, n, parent=None, svars=[]):
     return Subscript(self.dispatch(n.expr,parent,svars),n.flags,n.subs)
+
   def visitList(self,n,parent=None,svars=[]):
     return List([self.dispatch(cn,parent,svars) for cn in n.nodes])
+  
+  def visitAdd(self,n,parent=None,svars=[]):
+    return Add((self.dispatch(n.left,parent,svars),self.dispatch(n.right,parent,svars)))
+  
+  def visitSub(self,n,parent=None,svars=[]):
+    return Sub((self.dispatch(n.left,parent,svars),self.dispatch(n.right,parent,svars)))
+  
+  def visitUnarySub(self, n, parent=None, svars=[]):
+    return UnarySub(self.dispatch(n.expr,parent,svars))
+  
+  def visitCompare(self,n,parent=None,svars=[]):
+    return Compare(self.dispatch(n.expr,parent,svars),[(cn[0],self.dispatch(cn[1],parent,svars)) for cn in n.ops])
+  
+  def visitIfExp(self, n, parent=None, svars=[]):
+    return IfExp(self.dispatch(n.test,parent,svars),self.dispatch(n.then,parent,svars),self.dispatch(n.else_,parent,svars))
+  
+  def visitOr(self, n, parent=None, svars=[]):
+    return Or([self.dispatch(cn,parent,svars) for cn in n.nodes])
+  
+  def visitAnd(self, n, parent=None, svars=[]):
+    return And([self.dispatch(cn,parent,svars) for cn in n.nodes])
+  
+  def visitDict(self, n, parent=None, svars=[]):
+    return Dict([(self.dispatch(cn[0],parent,svars),self.dispatch(cn[1],parent,svars)) for cn in n.items])
+  
+  def visitNot(self, n, parent=None, svars=[]):
+    return Not(self.dispatch(n.expr,parent,svars))
+    
+  def visitReturn(self,n,parent=None,svars=[]):
+    return Return(self.dispatch(n.value,parent,svars))
+  
+  def visitWhile(self, n, parent=None, svars=[]):
+    if n.else_ is not None:
+      return While(self.dispatch(n.test,parent,svars),self.dispatch(n.body,parent,svars),self.dispatch(n.else_,parent,svars))
+    return While(self.dispatch(n.test,parent,svars),self.dispatch(n.body,parent,svars),n.else_)
+    
+  def visitIf(self, n, parent=None, svars=[]):
+    return If([(self.dispatch(c,parent,svars),self.dispatch(b,parent,svars)) for c,b in n.tests],self.dispatch(n.else_,parent,svars))
+  
+  def visitLambda(self,n,parent=None,svars=[]):
+    return Lambda(n.argnames,n.defaults,n.flags,self.dispatch(n.code,parent,svars))

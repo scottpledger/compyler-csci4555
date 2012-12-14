@@ -25,6 +25,7 @@ class GenX86Visitor(Visitor):
         self.var_map = {}
 
     def visitModule(self, n):
+        print "visitModule"
         local_vars = assigned_vars(n.node)
         base_offset = 4
         for l in local_vars:

@@ -13,3 +13,8 @@ parsetab.py
 *.bin
 *.o
 *.so
+*.out
+*.err
+*.ast
+*.apy
+*.pst

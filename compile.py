@@ -1,10 +1,12 @@
 #! /usr/local/bin/python
 
 import pdb
+import os
 import sys
 import compiler
 import mutils
 from compiler.ast import *
+from ast_printer import ASTPrinter,ASTPyPrinter
 from ir_x86 import *
 from explicit import PrintASTVisitor2
 from heapify import HeapifyVisitor, FreeInFunVisitor
@@ -25,34 +27,38 @@ from declassify import DeclassifyVisitor
 debug = mutils.debug()
 
 try:
-#    pdb.set_trace()
     input_file_name = sys.argv[1]
+    fbase = os.path.splitext(input_file_name)[0]
     ast = compiler.parseFile(input_file_name)
     if debug:
       mutils.print_debug('finished parsing')
-      mutils.print_debug(ast)
+      mutils.write_debug(repr(ast),fbase+'.prsr.ast')
+      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.prsr.apy')
     
     ast = DeclassifyVisitor().preorder(ast)
     if debug:
       mutils.print_debug('finished declassifying')
-      mutils.print_debug(ast)
+      mutils.write_debug(repr(ast),fbase+'.dcls.ast')
+      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.dcls.apy')
 
     ast = UniquifyVisitor().preorder(ast)
     if debug:
       mutils.print_debug('finished uniquifying')
-      mutils.print_debug(ast)
+      mutils.write_debug(repr(ast),fbase+'.uniq.ast')
+      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.uniq.apy')
 
     ast = ExplicateVisitor2().preorder(ast)
     if debug:
       mutils.print_debug( 'finished explicating')
-      mutils.print_debug(PrintASTVisitor2().preorder(ast))
+      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.expl.pst')
     
       mutils.print_debug('starting to heapify')
+      
     FreeInFunVisitor().preorder(ast)
     ast = HeapifyVisitor().preorder(ast)
     if debug:
       mutils.print_debug('finished heapifying')
-      mutils.print_debug(PrintASTVisitor2().preorder(ast))
+      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.heap.pst')
     
       mutils.print_debug('type checking')
     TypeCheckVisitor2().preorder(ast)
@@ -62,22 +68,23 @@ try:
     ast = ClosureConversionVisitor().preorder(ast)
     if debug:
       mutils.print_debug('finished closure conversion')
-      mutils.print_debug(PrintASTVisitor2().preorder(ast))
+      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.clsr.pst')
     
       mutils.print_debug('starting to flatten')
-      mutils.print_debug(ast,True)
+      mutils.write_debug(repr(ast),fbase+'.clsr.ast')
     instrs = FlattenVisitor4().preorder(ast)
     if debug:
       mutils.print_debug('finished flattening')
-      mutils.print_debug(PrintASTVisitor2().preorder(instrs))
+      mutils.write_debug(PrintASTVisitor2().preorder(instrs),fbase+'.flat.pst')
 
     funs = InstrSelVisitor4().preorder(instrs)
     
     if debug:
       mutils.print_debug('finished instruction selection')
-    for fun in funs:
-        mutils.print_debug(PrintVisitor3().preorder(fun))
-    if debug:
+      count=0
+      for fun in funs:
+        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.isel.'+str(count)+'.pst')
+        count+=1
       mutils.print_debug('starting register allocation')
 
     new_funs = []
@@ -92,8 +99,10 @@ try:
         fun.code = RemoveStructuredControl().preorder(fun.code)
     mutils.print_debug('finished removing structured control')
     if debug:
-        for fun in funs:
-            mutils.print_debug( PrintVisitor3().preorder(fun))
+      count=0
+      for fun in funs:
+        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.rmsc.'+str(count)+'.pst')
+        count+=1
 
     x86 = GenX86Visitor4().preorder(Stmt(funs))
     mutils.print_debug('finished generating x86')
