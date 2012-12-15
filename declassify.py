@@ -85,7 +85,6 @@ class DeclassifyVisitor(Visitor):
     elif n in svars and not parent==None:
       return Discard(CallFunc(Name('set_attr'),[parent,Const(get_assignment_name(n.nodes[0])),self.dispatch(n.expr,parent,svars)], None,None ))
     if parent == None:
-      
       if isinstance(an,AssAttr):
         return Discard(CallFunc(Name('set_attr'),[an.expr,Const(an.attrname),self.dispatch(n.expr,parent,svars)], None,None))
       else:
@@ -144,7 +143,29 @@ class DeclassifyVisitor(Visitor):
     return Discard(self.dispatch(n.expr,parent,svars))
   
   def visitCallFunc(self, n, parent=None, svars=[]):
-    return CallFunc(self.dispatch(n.node,parent,svars),[self.dispatch(arg,parent,svars) for arg in n.args],n.star_args,n.dstar_args)
+    print "In CallFunc!"
+    print n
+    f=self.dispatch(n.node,parent,svars)
+    args = [self.dispatch(arg,parent,svars) for arg in n.args]
+    ini = compiler_utilities.generate_name('obj_func')
+    obj = compiler_utilities.generate_name('obj_inst')
+    return IfExp( CallFunc(Name('is_class'),[f]),
+              CallFunc(Name('create_object'),[f]),
+              CallFunc(f,args)
+           )
+                  
+    return IfExp(
+              CallFunc(Name('is_class'),[f]),
+              IfExp(CallFunc(Name('has_attr'),[f,Const('__init__')]),
+                  Let(obj,CallFunc(Name('create_object'),[f]),
+                      Stmt([
+                        CallFunc(CallFunc(Name('get_attr'),[f,Const('__init__')]),[Name(obj)]+args)
+                      ])
+                  ),
+                  CallFunc(Name('create_object'),[f])
+              ),
+              CallFunc(f,args)
+          )
   
   def visitSubscript(self, n, parent=None, svars=[]):
     return Subscript(self.dispatch(n.expr,parent,svars),n.flags,n.subs)

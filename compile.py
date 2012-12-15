@@ -1,4 +1,4 @@
-#! /usr/local/bin/python
+#! /usr/bin/python
 
 import pdb
 import os

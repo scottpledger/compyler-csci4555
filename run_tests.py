@@ -21,6 +21,8 @@ default_prog = "./compile.py"
 default_tests_dir = "./test"
 
 parser = OptionParser()
+parser.add_option("--clean", default=False, action="store_true", dest="clean", help="whether or not to clean up former files.")
+
 parser.add_option("-t", "--test", dest="testfile", action="append",
                                   help="test file to compile, run, and check", metavar="FILE")
 parser.add_option("-d", "--dir", dest="testdir", action="append",
@@ -29,6 +31,7 @@ parser.add_option("-c", "--compiler", default="/usr/bin/make",
                   help="compiler command to use.")
 parser.add_option("-l", "--linker", default="/usr/bin/make",
                   help="linker command to use.")
+
 
 (options,args) = parser.parse_args()
 
@@ -123,6 +126,12 @@ for test_name in tests:
     test_linkerr = test_name+'.lnk.err'
     test_diffout = test_name+'.diff.out'
     test_differr = test_name+'.diff.err'
+    
+    if options.clean:
+      if os.path.exists(test_asmfile):
+        os.remove(test_asmfile)
+      if os.path.exists(test_binfile):
+        os.remove(test_binfile)
     
     compile_cmd = [compiler,test_asmfile]
     linker_cmd  = [linker,  test_binfile]
