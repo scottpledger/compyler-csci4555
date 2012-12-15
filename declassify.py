@@ -126,10 +126,6 @@ class DeclassifyVisitor(Visitor):
       nds.nodes += [self.dispatch(Assign([AssName(n.name, 'OP_ASSIGN')],Name(tmp)),parent,svars)]
     rval = [Assign([AssName(tmp, 'OP_ASSIGN')], CallFunc(Name('create_class'), [List(n.bases)]))]+\
            nds.nodes
-           
-           
-           
-    
     return rval
       
     
