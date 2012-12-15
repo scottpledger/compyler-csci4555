@@ -1,5 +1,5 @@
 import mutils
-from vis import Visitor,IVisitor
+from vis import MVisitor,IVisitor
 from compiler.ast import Node
 
 class ASTPrinter(IVisitor):
@@ -29,7 +29,7 @@ def doLine(val,depth,comment=False):
   else:
     return s+val+e
 
-class ASTPyPrinter(Visitor):
+class ASTPyPrinter(MVisitor):
   
   def visitNode(self,n,depth=0):
     print n

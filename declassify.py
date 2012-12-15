@@ -36,7 +36,7 @@ def get_reference_node(n):
   return False
 
 def get_assignment_name(n):
-  if isinstance(n,Name) or isinstance(n,Function) or isinstance(n,AssName):
+  if isinstance(n,Name) or isinstance(n,Function) or isinstance(n,AssName) or isinstance(n,Class):
     return n.name
   if isinstance(n,AssAttr):
     return n.attrname
@@ -80,20 +80,20 @@ class DeclassifyVisitor(Visitor):
   def visitAssign(self,n,parent=None,svars=[]):
     an = n.nodes[0]
     if isinstance(n.nodes[0],AssAttr):
-      return Discard(CallFunc(Name('set_attr'),[self.dispatch(an.expr,parent,svars),Const(an.attrname),self.dispatch(n.expr,parent,svars)], None,None))
+      return Discard(CallFunc(Name('set_attr'),[self.dispatch(an.expr,parent,svars),Const(an.attrname),self.dispatch(n.expr,parent,svars)]))
     if get_assignment_name(n.nodes[0]) in svars and not parent==None:
-      return Discard(CallFunc(Name('set_attr'),[parent,Const(get_assignment_name(n.nodes[0])),self.dispatch(n.expr,parent,svars)], None,None ))
+      return Discard(CallFunc(Name('set_attr'),[parent,Const(get_assignment_name(n.nodes[0])),self.dispatch(n.expr,parent,svars)]))
     elif n in svars and not parent==None:
-      return Discard(CallFunc(Name('set_attr'),[parent,Const(get_assignment_name(n.nodes[0])),self.dispatch(n.expr,parent,svars)], None,None ))
+      return Discard(CallFunc(Name('set_attr'),[parent,Const(get_assignment_name(n.nodes[0])),self.dispatch(n.expr,parent,svars)]))
     if parent == None:
       if isinstance(an,AssAttr):
-        return Discard(CallFunc(Name('set_attr'),[an.expr,Const(an.attrname),self.dispatch(n.expr,parent,svars)], None,None))
+        return Discard(CallFunc(Name('set_attr'),[an.expr,Const(an.attrname),self.dispatch(n.expr,parent,svars)]))
       else:
         return Assign([self.dispatch(cn,parent,svars) for cn in n.nodes],self.dispatch(n.expr,parent,svars))
     else:
       #we has a parent!
       if(isinstance(an,AssAttr)):
-        return Discard(CallFunc(Name('set_attr'),[an.expr,Const(get_assignment_name(an.attrname)),self.dispatch(n.expr,parent,svars)], None,None ))
+        return Discard(CallFunc(Name('set_attr'),[an.expr,Const(get_assignment_name(an.attrname)),self.dispatch(n.expr,parent,svars)] ))
       else:
         return Assign([self.dispatch(cn,parent,svars) for cn in n.nodes],self.dispatch(n.expr,parent,svars))
     
@@ -109,7 +109,7 @@ class DeclassifyVisitor(Visitor):
     elif n.name in svars:
       tmp = compiler_utilities.generate_name('class_func')
       return [Function(n.decorators,tmp,n.argnames,n.defaults,n.flags,n.doc,self.dispatch(n.code,parent,svars)), \
-              Discard(CallFunc(Name('set_attr'),[parent,Const(n.name),Name(tmp)], None,None ))]
+              Discard(CallFunc(Name('set_attr'),[parent,Const(n.name),Name(tmp)]))]
   
   def visitClass(self,n,parent=None,svars=[]):
     #n.name
@@ -118,9 +118,15 @@ class DeclassifyVisitor(Visitor):
     cvars = DeclassifyBodyFVVisitor().preorder(n.code)
     tmp = compiler_utilities.generate_name('class_var')
     nds = self.dispatch(n.code,Name(tmp),cvars)
-    return [Assign([AssName(tmp, 'OP_ASSIGN')], CallFunc(Name('create_class'), [List(n.bases)], None, None))]+\
-           [nds] + \
-           [Assign([AssName(n.name, 'OP_ASSIGN')],Name(tmp))]
+    rval = [Assign([AssName(tmp, 'OP_ASSIGN')], CallFunc(Name('create_class'), [List(n.bases)]))]+\
+           [nds]
+           
+    if parent is None:
+      rval += [Assign([AssName(n.name, 'OP_ASSIGN')],Name(tmp))]
+    else:
+      rval += [Discard(CallFunc(Name('set_attr'),[parent,Const(n.name),Name(tmp)]))]
+    return rval
+      
     
   
   def visitConst(self,n,parent=None,svars=[]):
@@ -130,14 +136,14 @@ class DeclassifyVisitor(Visitor):
     return Printnl([self.dispatch(cn,parent,svars) for cn in n.nodes],n.dest)
   
   def visitGetattr(self,n,parent=None,svars=[]):
-    return CallFunc(Name('get_attr'),[self.dispatch(n.expr,parent,svars),Const(n.attrname)],None,None)
+    return CallFunc(Name('get_attr'),[self.dispatch(n.expr,parent,svars),Const(n.attrname)])
   
   def visitNode(self,n,parent=None,svars=[]):
     return n
   
   def visitName(self, n, parent=None, svars=[]):
     if n.name in svars:
-      return CallFunc(Name('get_attr'),[parent,Const(n.name)],None,None)
+      return CallFunc(Name('get_attr'),[parent,Const(n.name)])
     return n
   
   def visitDiscard(self, n, parent=None, svars=[]):

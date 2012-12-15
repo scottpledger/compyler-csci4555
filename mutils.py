@@ -8,7 +8,7 @@ debug_all = False
 
 debug_default = False
 debug_mods = {
-  'compile':True,
+  'compile':debug_default,
   'ast_printer':debug_default,
   'declassify':debug_default,
   'assigned_vars':debug_default,

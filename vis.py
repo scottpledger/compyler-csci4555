@@ -70,9 +70,15 @@ class IVisitor(Visitor):
 
 class MVisitor(Visitor):
     def dispatch(self, node, *args):
+      
         if type(node) is list:
           try:
-            from multiprocessing import Process, Manager
+            import multiprocessing as mp
+            from multiprocessing import Pool
+            
+            p = Pool(4)
+            return p.map(lambda t: self.dispatch(t,*args),node)
+            
           except Exception:
             return [self.dispatch(sn,*args) for sn in node]
         mutils.print_debug( 'dispatching for ' + repr(node.__class__) )
