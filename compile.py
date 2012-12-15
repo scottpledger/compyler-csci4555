@@ -32,25 +32,25 @@ try:
     ast = compiler.parseFile(input_file_name)
     if debug:
       mutils.print_debug('finished parsing')
-      mutils.write_debug(repr(ast),fbase+'.prsr.ast')
-      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.prsr.apy')
+      mutils.write_debug(repr(ast),fbase+'.00.prsr.ast')
+      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.01.prsr.apy')
     
     ast = DeclassifyVisitor().preorder(ast)
     if debug:
       mutils.print_debug('finished declassifying')
-      mutils.write_debug(repr(ast),fbase+'.dcls.ast')
-      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.dcls.apy')
+      mutils.write_debug(repr(ast),fbase+'.02.dcls.ast')
+      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.03.dcls.apy')
 
     ast = UniquifyVisitor().preorder(ast)
     if debug:
       mutils.print_debug('finished uniquifying')
-      mutils.write_debug(repr(ast),fbase+'.uniq.ast')
-      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.uniq.apy')
+      mutils.write_debug(repr(ast),fbase+'.04.uniq.ast')
+      mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.05.uniq.apy')
 
     ast = ExplicateVisitor2().preorder(ast)
     if debug:
       mutils.print_debug( 'finished explicating')
-      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.expl.pst')
+      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.06.expl.pst')
     
       mutils.print_debug('starting to heapify')
       
@@ -58,7 +58,7 @@ try:
     ast = HeapifyVisitor().preorder(ast)
     if debug:
       mutils.print_debug('finished heapifying')
-      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.heap.pst')
+      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.07.heap.pst')
     
       mutils.print_debug('type checking')
     TypeCheckVisitor2().preorder(ast)
@@ -68,14 +68,14 @@ try:
     ast = ClosureConversionVisitor().preorder(ast)
     if debug:
       mutils.print_debug('finished closure conversion')
-      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.clsr.pst')
+      mutils.write_debug(PrintASTVisitor2().preorder(ast),fbase+'.08.clsr.pst')
     
       mutils.print_debug('starting to flatten')
       mutils.write_debug(repr(ast),fbase+'.clsr.ast')
     instrs = FlattenVisitor4().preorder(ast)
     if debug:
       mutils.print_debug('finished flattening')
-      mutils.write_debug(PrintASTVisitor2().preorder(instrs),fbase+'.flat.pst')
+      mutils.write_debug(PrintASTVisitor2().preorder(instrs),fbase+'.09.flat.pst')
 
     funs = InstrSelVisitor4().preorder(instrs)
     
@@ -83,7 +83,7 @@ try:
       mutils.print_debug('finished instruction selection')
       count=0
       for fun in funs:
-        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.isel.'+str(count)+'.pst')
+        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.10.isel.'+str(count)+'.pst')
         count+=1
       mutils.print_debug('starting register allocation')
 
@@ -101,15 +101,15 @@ try:
     if debug:
       count=0
       for fun in funs:
-        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.rmsc.'+str(count)+'.pst')
+        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.11.rmsc.'+str(count)+'.pst')
         count+=1
 
     x86 = GenX86Visitor4().preorder(Stmt(funs))
     mutils.print_debug('finished generating x86')
     
-    x86_data = "\n"
+    x86_data = ".text\n"
     for key in string_constants.keys():
-      x86_data += "%s:\n .ascii \"%s\\10\\0\"\n" %(key,string_constants[key])
+      x86_data += "%s:\n    .asciz \"%s\"\n" %(key,string_constants[key])
     
     
 
