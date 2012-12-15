@@ -18,3 +18,4 @@ parsetab.py
 *.ast
 *.apy
 *.pst
+*.kate-swp
