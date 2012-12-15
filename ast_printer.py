@@ -170,7 +170,7 @@ class ASTPyPrinter(Visitor):
     return doLine('return '+self.dispatch(n.value,-1),depth)
   
   def visitIfExp(self,n,depth=0):
-    return doLine(self.dispatch(n.then,-1)+' if '+self.dispatch(n.test,-1)+' else '+self.dispatch(n.else_,-1),depth)
+    return doLine('(' + self.dispatch(n.then,-1)+' if '+self.dispatch(n.test,-1)+' else '+self.dispatch(n.else_,-1)+' )',depth)
   
   def visitUnarySub(self,n,depth=0):
     return doLine('-'+self.dispatch(n.expr,-1),depth)
@@ -237,4 +237,8 @@ class ASTPyPrinter(Visitor):
     for a in n.argnames:
       string+= ' '+a
     string += ': ' + self.dispatch(n.code,-1)
+    return doLine(string,depth)
+
+  def visitLet(self,n,depth=0):
+    string = '(let '+n.var+' = '+ self.dispatch(n.rhs,-1)+' in ('+self.dispatch(n.body,-1)+')'
     return doLine(string,depth)

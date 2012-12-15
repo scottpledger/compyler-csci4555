@@ -67,3 +67,54 @@ class IVisitor(Visitor):
         ret = meth(node, *args)
         mutils.print_debug( 'finished with ' + repr(node.__class__) )
         return ret
+
+class MVisitor(Visitor):
+    def dispatch(self, node, *args):
+        if type(node) is list:
+          try:
+            from multiprocessing import Process, Manager
+          except Exception:
+            return [self.dispatch(sn,*args) for sn in node]
+        mutils.print_debug( 'dispatching for ' + repr(node.__class__) )
+        mutils.print_debug('   ' + repr(node) + ' in ' \
+                  + self.__class__.__name__ )
+        self.node = node
+        klass = node.__class__
+        meth = self._cache.get(klass, None)
+        if meth is None:
+            className = klass.__name__
+            meth = getattr(self.visitor, 'visit' + className, self.default)
+            self._cache[klass] = meth
+        ret = meth(node, *args)
+        mutils.print_debug('finished with ' + repr(node.__class__) )
+        return ret
+
+class MIVisitor(IVisitor):
+    def dispatch(self, node, *args):
+        mutils.print_debug('dispatching for ' + repr(node.__class__) )
+        mutils.print_debug( '   ' + repr(node) + ' in ' \
+                  + self.__class__.__name__)
+        self.node = node
+        klass = node.__class__
+        meth = self._cache.get(klass, None)
+        if meth is None:
+            classList = [] # This is really a stack for the dfs search we're about to perform.
+            classList.append(klass)
+            
+            while len(classList) >0 and meth is None:
+                sklass = classList.pop()
+                if hasattr(self.visitor, 'visit' + sklass.__name__):
+                    meth = getattr(self.visitor,'visit'+sklass.__name__, self.default)
+                    classList = []
+                else:
+                    # Ensures we parse classes _exactly_ like python does -- dfs, ltr.
+                    classList = classList + [b for b in reversed(list(sklass.__bases__)) ]
+                
+            if meth is None:
+                meth = self.default
+            
+            self._cache[klass] = meth
+            
+        ret = meth(node, *args)
+        mutils.print_debug( 'finished with ' + repr(node.__class__) )
+        return ret

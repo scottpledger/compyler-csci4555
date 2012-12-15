@@ -30,10 +30,13 @@ try:
     input_file_name = sys.argv[1]
     fbase = os.path.splitext(input_file_name)[0]
     ast = compiler.parseFile(input_file_name)
+    
     if debug:
       mutils.print_debug('finished parsing')
       mutils.write_debug(repr(ast),fbase+'.00.prsr.ast')
       mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.01.prsr.apy')
+    
+    
     
     ast = DeclassifyVisitor().preorder(ast)
     if debug:

@@ -142,7 +142,8 @@ class PrintVisitor3(PrintVisitor2):
 
     def visitFunction(self, n):
         params = ', '.join(n.argnames)
-        return 'def %s(%s):\n%s\n' % (n.name, params, self.dispatch(n.code))
+        code = '  '+self.dispatch(n.code)
+        return 'def %s(%s):\n%s\n' % (n.name, params, code)
 
     def visitReturn(self, n):
         return 'return %s' % self.dispatch(n.value)

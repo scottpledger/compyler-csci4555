@@ -50,7 +50,7 @@ if not os.path.exists(linker):
 tests = []
 if options.testdir is not None:
   for d in options.testdir:
-    tests += [d+'/'+f for f in os.listdir(d)]
+    tests += sorted([d+'/'+f for f in os.listdir(d)])
 
 if options.testfile is not None:
   for f in options.testfile:

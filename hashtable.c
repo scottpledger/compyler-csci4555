@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-
+#include "gc.h"
 /*
 Credit for primes table: Aaron Krowne
  http://br.endernet.org/~akrowne/

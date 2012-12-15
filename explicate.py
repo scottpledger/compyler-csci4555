@@ -212,3 +212,7 @@ class ExplicateVisitor2(ExplicateVisitor):
           else_ = None
         return While(letify(test, lambda t: gen_is_true(t)),
                      body, else_)
+    def visitLet(self, n):
+        rhs = self.dispatch(n.rhs)
+        body = self.dispatch(n.body)
+        return Let(n.var,rhs,body)

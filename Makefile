@@ -74,6 +74,11 @@ clean-asm-p0:
 
 clean-exe-p0:
 	rm -f ./tests/p0/*.bin
+	rm -f ./tests/p0/*.ast
+	rm -f ./tests/p0/*.apy
+	rm -f ./tests/p0/*.err
+	rm -f ./tests/p0/*.out
+	rm -f ./tests/p0/*.pst
 
 gen-asm-p1: ${P1_FILES_AS}
 
@@ -84,6 +89,11 @@ clean-asm-p1:
 
 clean-exe-p1:
 	rm -f ./tests/p1/*.bin
+	rm -f ./tests/p1/*.ast
+	rm -f ./tests/p1/*.apy
+	rm -f ./tests/p1/*.err
+	rm -f ./tests/p1/*.out
+	rm -f ./tests/p1/*.pst
 
 gen-asm-p2: ${P2_FILES_AS}
 
@@ -94,6 +104,11 @@ clean-asm-p2:
 
 clean-exe-p2:
 	rm -f ./tests/p2/*.bin
+	rm -f ./tests/p2/*.ast
+	rm -f ./tests/p2/*.apy
+	rm -f ./tests/p2/*.err
+	rm -f ./tests/p2/*.out
+	rm -f ./tests/p2/*.pst
 
 gen-asm-p3: ${P3_FILES_AS}
 
@@ -104,6 +119,11 @@ clean-asm-p3:
 
 clean-exe-p3:
 	rm -f ./tests/p3/*.bin
+	rm -f ./tests/p3/*.ast
+	rm -f ./tests/p3/*.apy
+	rm -f ./tests/p3/*.err
+	rm -f ./tests/p3/*.out
+	rm -f ./tests/p3/*.pst
 
 
 gen-asm-tests: gen-asm-p0 gen-asm-p1 gen-asm-p2 gen-asm-p3
@@ -133,7 +153,7 @@ P3_TEST_EXP = ${P3_FILES_PY:%.py=%.expected}
 
 %.expected:
 	rm -f $*.expected
-	wget -P $(shell dirname $*) http://csci4555.cs.colorado.edu/test_$(shell basename $(shell dirname $*) )/$(shell basename $*).expected > /dev/null || touch $*.expected
+	python $*.py >> $*.expected
 	
 
 get-tests-p%:

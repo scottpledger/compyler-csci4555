@@ -258,7 +258,8 @@ class PrintASTVisitor(Visitor):
         return self.dispatch(n.node)
 
     def visitStmt(self, n):
-        return '{\n' + '\n'.join([self.dispatch(s) for s in n.nodes]) + '\n}'
+        string='\n' + '\n'.join([self.dispatch(s) for s in n.nodes])
+        return '{' + string.replace('\n','\n   ') + '\n}'
 
     def visitPrintnl(self, n):
         return 'print ' + self.dispatch(n.nodes[0])

@@ -64,7 +64,8 @@ class DeclassifyBodyFVVisitor(IVisitor):
 class DeclassifyVisitor(Visitor):
   
   def visitModule(self,n):
-    return Module(n.doc,self.dispatch(n.node))
+    stmt = self.dispatch(n.node)
+    return Module(n.doc,stmt)
   
   def visitStmt(self,n,parent=None,svars=[]):
     nodes = []
@@ -143,28 +144,33 @@ class DeclassifyVisitor(Visitor):
     return Discard(self.dispatch(n.expr,parent,svars))
   
   def visitCallFunc(self, n, parent=None, svars=[]):
-    print "In CallFunc!"
-    print n
     f=self.dispatch(n.node,parent,svars)
     args = [self.dispatch(arg,parent,svars) for arg in n.args]
+    #return CallFunc(f,args)
     ini = compiler_utilities.generate_name('obj_func')
     obj = compiler_utilities.generate_name('obj_inst')
-    return IfExp( CallFunc(Name('is_class'),[f]),
-              CallFunc(Name('create_object'),[f]),
-              CallFunc(f,args)
-           )
+    #return IfExp( CallFunc(Name('is_class'),[f]),
+    #          CallFunc(Name('create_object'),[f]),
+    #          CallFunc(f,args)
+    #       )
                   
     return IfExp(
               CallFunc(Name('is_class'),[f]),
-              IfExp(CallFunc(Name('has_attr'),[f,Const('__init__')]),
-                  Let(obj,CallFunc(Name('create_object'),[f]),
-                      Stmt([
-                        CallFunc(CallFunc(Name('get_attr'),[f,Const('__init__')]),[Name(obj)]+args)
-                      ])
-                  ),
-                  CallFunc(Name('create_object'),[f])
+              Let(obj,CallFunc(Name('create_object'),[f]),
+                  IfExp(CallFunc(Name('has_attr'),[f,Const('__init__')]),
+                      Let(ini,CallFunc(Name('get_function'),[CallFunc(Name('get_attr'),[f,Const('__init__')])]),
+                          Let('_',CallFunc(Name(ini),[Name(obj)]+args),Name(obj))
+                      ),
+                      Name(obj)
+                  )
               ),
-              CallFunc(f,args)
+              IfExp(CallFunc(Name('is_bound_method'),[f]),
+                  CallFunc(CallFunc(Name('get_function'),[f]),[CallFunc(Name('get_receiver'),[f])]+args),
+                  IfExp(CallFunc(Name('is_unbound_method'),[f]),
+                      CallFunc(CallFunc(Name('get_function'),[f]),args),
+                      CallFunc(f,args)
+                  )
+              )
           )
   
   def visitSubscript(self, n, parent=None, svars=[]):

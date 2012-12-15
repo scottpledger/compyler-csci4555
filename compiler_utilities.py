@@ -21,7 +21,8 @@ builtin_functions = ['input_int', 'input', 'print_any', 'create_dict', 'create_l
                      'get_fun_ptr', 'get_free_vars',
                      'create_class', 'get_attr', 'set_attr', 'has_attr',
                      'create_object', 'get_class', 'is_class',
-                     'get_function', 'get_receiver', 'is_bound_method', 'is_unbound_method']
+                     'get_function', 'get_receiver', 'is_bound_method', 'is_unbound_method', 
+                     'gc_init', 'gc_alloc']
 
 def unzip(ls):
     ls1 = [x for (x,y) in ls]
