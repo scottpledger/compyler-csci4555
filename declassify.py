@@ -48,6 +48,8 @@ class DeclassifyBodyFVVisitor(IVisitor):
     for cn in n.nodes:
       specvars = specvars + self.dispatch(cn)
     return specvars
+  def visitClass(self,n):
+    return [n.name]
   
   def visitFunction(self,n):
     return [n.name]
@@ -118,13 +120,16 @@ class DeclassifyVisitor(Visitor):
     cvars = DeclassifyBodyFVVisitor().preorder(n.code)
     tmp = compiler_utilities.generate_name('class_var')
     nds = self.dispatch(n.code,Name(tmp),cvars)
-    rval = [Assign([AssName(tmp, 'OP_ASSIGN')], CallFunc(Name('create_class'), [List(n.bases)]))]+\
-           [nds]
-           
     if parent is None:
-      rval += [Assign([AssName(n.name, 'OP_ASSIGN')],Name(tmp))]
+      nds.nodes += [Assign([AssName(n.name, 'OP_ASSIGN')],Name(tmp))]
     else:
-      rval += [Discard(CallFunc(Name('set_attr'),[parent,Const(n.name),Name(tmp)]))]
+      nds.nodes += [self.dispatch(Assign([AssName(n.name, 'OP_ASSIGN')],Name(tmp)),parent,svars)]
+    rval = [Assign([AssName(tmp, 'OP_ASSIGN')], CallFunc(Name('create_class'), [List(n.bases)]))]+\
+           nds.nodes
+           
+           
+           
+    
     return rval
       
     
