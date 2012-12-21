@@ -44,7 +44,7 @@ void gc_init()
 	
 	start_pointers[gc_alloc_slab_counter] = (int *) mmap(NULL, slab_size, 
 		  			PROT_READ | PROT_WRITE, 
-		 		 	MAP_ANON | MAP_PRIVATE,
+		 		 	MAP_ANONYMOUS | MAP_SHARED,
 		  			0, 0);
 	end_pointers[gc_alloc_slab_counter] = (int *)((int)start_pointers[gc_alloc_slab_counter] + slab_size);
 	alloc = start_pointers[gc_alloc_slab_counter];
