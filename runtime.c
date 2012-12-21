@@ -197,8 +197,8 @@ pyobj input_int() {
 */
 
 static big_pyobj* list_to_big(list l) {
-  //big_pyobj* v = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj));
+  big_pyobj* v = (big_pyobj*)malloc(sizeof(big_pyobj));
+  //big_pyobj* v = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   v->tag = LIST;
   v->u.l = l;
   return v;
