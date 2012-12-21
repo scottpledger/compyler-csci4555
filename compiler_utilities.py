@@ -22,7 +22,7 @@ builtin_functions = ['input_int', 'input', 'print_any', 'create_dict', 'create_l
                      'create_class', 'get_attr', 'set_attr', 'has_attr',
                      'create_object', 'get_class', 'is_class',
                      'get_function', 'get_receiver', 'is_bound_method', 'is_unbound_method', 
-                     'gc_init', 'gc_alloc', 'gc_collect','gc_dealloc']
+                     'gc_init', 'gc_alloc', 'gc_collect_all','gc_dealloc']
 
 def unzip(ls):
     ls1 = [x for (x,y) in ls]

@@ -5,7 +5,7 @@ def liveness(n):
     if hasattr(n, 'live'):
         s = '\t{' + ','.join(n.live) + '}'
     else:
-        s = ''
+        s = '\t{}'
     return s
     
 
@@ -15,37 +15,37 @@ class PrintVisitor(Visitor):
         return self.dispatch(n.node)
 
     def visitStmt(self, n):
-        return '{\n' + '\n'.join([self.dispatch(s) for s in n.nodes]) + '\n}'
+        return '{\n  ' + '\n  '.join([self.dispatch(s) + liveness(s) for s in n.nodes]) + '\n}'
 
     def visitCallX86(self, n):
-        return 'call ' + n.name + liveness(n)
+        return 'call ' + n.name #+ liveness(n)
 
     def visitPush(self, n):
-        return 'pushl ' + self.dispatch(n.arg) + liveness(n)
+        return 'pushl ' + self.dispatch(n.arg) #+ liveness(n)
 
     def visitPop(self, n):
-        return 'addl $' + repr(n.bytes) + ', %esp' + liveness(n)
+        return 'addl $' + repr(n.bytes) + ', %esp' #+ liveness(n)
 
     def visitIntMoveInstr(self, n):
         return ('movl %s, %s' % (self.dispatch(n.rhs[0]),
-                                self.dispatch(n.lhs))) + liveness(n)
+                                self.dispatch(n.lhs))) #+ liveness(n)
 
     def visitIntAddInstr(self, n):
         return ('addl %s, %s' % (self.dispatch(n.rhs[0]),
-                                self.dispatch(n.lhs))) + liveness(n)
+                                self.dispatch(n.lhs))) #+ liveness(n)
 
     def visitIntLEAInstr(self, n):
         return ('%s = %s + %s' % (self.dispatch(n.lhs),
                                  self.dispatch(n.rhs[0]),
-                                 self.dispatch(n.rhs[1]))) + liveness(n)
+                                 self.dispatch(n.rhs[1]))) #+ liveness(n)
 
     def visitIntSubInstr(self, n):
         return ('subl %s, %s' % (self.dispatch(n.rhs[0]), self.dispatch(n.lhs)
-                                )) + liveness(n)
+                                )) #+ liveness(n)
 
     def visitIntNegInstr(self, n):
         x = self.dispatch(n.lhs)
-        return ('negl %s' % x)  + liveness(n)
+        return ('negl %s' % x)  #+ liveness(n)
 
     def visitName(self, n):
         return n.name
@@ -142,7 +142,7 @@ class PrintVisitor3(PrintVisitor2):
 
     def visitFunction(self, n):
         params = ', '.join(n.argnames)
-        code = '  '+self.dispatch(n.code)
+        code = self.dispatch(n.code)
         return 'def %s(%s):\n%s\n' % (n.name, params, code)
 
     def visitReturn(self, n):

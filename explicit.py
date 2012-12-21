@@ -97,7 +97,7 @@ param_types = {
     'get_receiver' : ['pyobj'],
     'is_bound_method' : ['pyobj'],
     'is_unbound_method' : ['pyobj'],
-    'gc_collect' : [],
+    'gc_collect_all' : [],
     'gc_dealloc' : []
     }
 
@@ -121,8 +121,8 @@ return_type = {
     'get_receiver' : 'big',
     'is_bound_method' : 'bool',
     'is_unbound_method' : 'bool',
-    'gc_collect' : 'bool',
-    'gc_alloc'   : 'bool'
+    'gc_collect_all' : 'bool',
+    'gc_dealloc'   : 'bool'
     }
 
 class TypeCheckVisitor(Visitor):

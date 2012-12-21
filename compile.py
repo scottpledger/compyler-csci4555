@@ -43,7 +43,7 @@ try:
       mutils.print_debug('finished declassifying')
       mutils.write_debug(repr(ast),fbase+'.02.dcls.ast')
       mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.03.dcls.apy')
-    ast.node.nodes += [Discard(CallFunc(Name('gc_collect'),[]))]
+    ast.node.nodes += [Discard(CallFunc(Name('gc_collect_all'),[]))]
 
     ast = UniquifyVisitor().preorder(ast)
     if debug:
@@ -97,7 +97,8 @@ try:
         new_fun = RegisterAlloc3().allocate_registers(fun,
                                                          input_file_name + '_' + fun.name)
         new_funs += [new_fun]
-        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.11.rmsc.'+str(count)+'.pst')
+        if debug:
+          mutils.write_debug(PrintVisitor3().preorder(new_fun),fbase+'.11.ralc.'+fun.name+'.pst')
     funs = new_funs
     mutils.print_debug('finished register allocation')
 
@@ -107,7 +108,7 @@ try:
     if debug:
       count=0
       for fun in funs:
-        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.11.rmsc.'+str(count)+'.pst')
+        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.12.rmsc.'+fun.name+'.pst')
         count+=1
     
     x86 = GenX86Visitor4().preorder(Stmt(funs))
