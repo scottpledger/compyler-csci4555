@@ -96,7 +96,8 @@ param_types = {
     'get_function' : ['pyobj'],
     'get_receiver' : ['pyobj'],
     'is_bound_method' : ['pyobj'],
-    'is_unbound_method' : ['pyobj']
+    'is_unbound_method' : ['pyobj'],
+    'gc_collect' : []
     }
 
 return_type = {
@@ -118,7 +119,8 @@ return_type = {
     'get_function' : 'big',
     'get_receiver' : 'big',
     'is_bound_method' : 'bool',
-    'is_unbound_method' : 'bool'
+    'is_unbound_method' : 'bool',
+    'gc_collect' : 'bool'
     }
 
 class TypeCheckVisitor(Visitor):

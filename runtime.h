@@ -1,6 +1,7 @@
 #ifndef RUNTIME_H
 #define RUNTIME_H
 
+#include "gc.h"
 #include "hashtable.h"
 #include "hashtable_itr.h"
 #include "hashtable_utility.h"
@@ -87,6 +88,8 @@ struct pyobj_struct {
   } u;
 };
 typedef struct pyobj_struct big_pyobj;
+
+void* py_alloc(int o_size,int p_size,int num);
 
 int tag(pyobj val);
 

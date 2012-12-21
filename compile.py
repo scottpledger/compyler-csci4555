@@ -43,6 +43,7 @@ try:
       mutils.print_debug('finished declassifying')
       mutils.write_debug(repr(ast),fbase+'.02.dcls.ast')
       mutils.write_debug(ASTPyPrinter().preorder(ast),fbase+'.03.dcls.apy')
+    ast.node.nodes += [Discard(CallFunc(Name('gc_collect'),[]))]
 
     ast = UniquifyVisitor().preorder(ast)
     if debug:
@@ -106,7 +107,7 @@ try:
       for fun in funs:
         mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.11.rmsc.'+str(count)+'.pst')
         count+=1
-
+    
     x86 = GenX86Visitor4().preorder(Stmt(funs))
     mutils.print_debug('finished generating x86')
     
