@@ -18,9 +18,9 @@ void *root_set[ROOT_SET_LENGTH] = {ROOT_SET_NULL};
 int gc_alloc_slab_counter = -1;
 
 int * start_pointers[1000];
-memset(start_pointers, 0, 1000);
+memset(start_pointers, NULL, 1000);
 int * end_pointers[1000];
-memset(end_pointers, 0, 1000);
+memset(end_pointers, NULL, 1000);
 int * alloc;
 int root_alloc = -1;
 
@@ -56,7 +56,7 @@ void* gc_alloc(gc_type_info *info)
 	  
 	if(!have_room(info))
 	{
-		gc_collect()
+		gc_collect();
 		if(!have_room(info))
 			gc_init();
 		return gc_alloc(info);
@@ -78,7 +78,7 @@ void* gc_alloc(gc_type_info *info)
 		root_alloc = -1;
 		return gc_alloc(info);
 	}
-	return (void *)((int)alloc - size_in_bytes(info))
+	return (void *)((int)alloc - size_in_bytes(info));
 
 	//return (void *)((int)alloc - size_in_bytes(info));                 //return front of payload
 }
