@@ -30,6 +30,10 @@ int * end_pointers[1000];
 memset(end_pointers, NULL, 1000);
 */
 
+void print_debug_info(){
+  printf("=========DEBUG SHIT========\nstart_pointer[%d]: %d\nalloc: %d\nalloc[0]:%d\nalloc[1]:%d\n==========END DEBUG SHIT==========\n",gc_alloc_slab_counter,start_pointers[gc_alloc_slab_counter],alloc,alloc[0],alloc[1]);
+}
+
 
 void gc_init()
 {
@@ -50,6 +54,7 @@ void gc_init()
 }
 
 void* py_alloc(int o_size){
+    printf("Allocating %d...\n",o_size);
 	gc_type_info info = { .size_in_bytes = o_size, .pointers = {0}, .tenured = 0 };
 	return gc_alloc(&info);
 }
@@ -68,12 +73,12 @@ void* gc_alloc(gc_type_info *info)
 		gc_collect();
 		if(!have_room(info))
 			gc_init();
-		return gc_alloc(info);
+		//return gc_alloc(info);
 	}
-		
+    printf("=========STRT DEBUG SHIT========\nstart_pointer[%d]: %d\nalloc: %d\nalloc[0]:%d\nalloc[1]:%d\n==========END DEBUG SHIT==========\n",gc_alloc_slab_counter,start_pointers[gc_alloc_slab_counter],alloc,alloc[0],alloc[1]);
 	alloc[0] = (int)info;                                              //use interger arithmatic, sets metadata for type
 	alloc[1] = (int)NULL;                                              //set meta data for copy pointer
-	
+	printf("=========STRT DEBUG SHIT========\nstart_pointer[%d]: %d\nalloc: %d\nalloc[0]:%d\nalloc[1]:%d\n==========END DEBUG SHIT==========\n",gc_alloc_slab_counter,start_pointers[gc_alloc_slab_counter],alloc,alloc[0],alloc[1]);
 	alloc = (int *)((int)alloc + size_in_bytes(info) + 8);             //move allocate to the end of the item you just put in
 
 	if(root_alloc < ROOT_SET_LENGTH)

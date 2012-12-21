@@ -44,7 +44,7 @@ typedef struct {
 //
 //for use by our python compiler
 //
-void* py_alloc(int o_size);
+extern void* py_alloc(int o_size);
 
 //
 // The gc_init() routine should be called before anything is allocated.
