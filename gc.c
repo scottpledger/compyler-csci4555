@@ -17,8 +17,8 @@ void *root_set[ROOT_SET_LENGTH] = {ROOT_SET_NULL};
 
 int gc_alloc_slab_counter = -1;
 
-int * start_pointers[1000];
-int * end_pointers[1000];
+int * start_pointers[1000] = {ROOT_SET_NULL};
+int * end_pointers[1000] = {ROOT_SET_NULL};
 int * alloc;
 
 
@@ -52,8 +52,10 @@ void* gc_alloc(gc_type_info *info)
 	  
 	if(!have_room(info))
 	{
-		gc_init();
-		return gc_alloc(info);
+		gc_collect();
+		if(!have_room(info))
+			gc_init();
+		//return gc_alloc(info);
 	}
 	alloc[0] = (int)info;                                              //use interger arithmatic, sets metadata for type
 	alloc[1] = (int)NULL;                                              //set meta data for copy pointer
