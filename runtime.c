@@ -126,7 +126,10 @@ unbound_method project_unbound_method(pyobj val) {
 }
 
 static void free_variable(pyobj val){
-  
+  if(is_big(val)){
+    big_pyobj* p = project_big(val);
+    gc_set_null(p);
+  }
 }
 
 /* Not used? */
