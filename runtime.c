@@ -125,6 +125,9 @@ unbound_method project_unbound_method(pyobj val) {
   return p->u.ubm;
 }
 
+static void free_variable(pyobj val){
+  
+}
 
 /* Not used? */
 static int is_zero(pyobj val) {

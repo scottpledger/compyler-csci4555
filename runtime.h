@@ -110,6 +110,8 @@ int project_int(pyobj val);
 int project_bool(pyobj val);
 big_pyobj* project_big(pyobj val);
 
+void free_variable(pyobj val);
+
 /* Operations */
 
 int is_true(pyobj v);
