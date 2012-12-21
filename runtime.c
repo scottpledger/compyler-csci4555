@@ -829,8 +829,8 @@ static int attrname_equal(void *a, void *b)
 
 big_pyobj* create_class(pyobj bases)
 {
-  //big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
-  big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
+  big_pyobj* ret = (big_pyobj*)malloc(sizeof(big_pyobj));
+  //big_pyobj* ret = (big_pyobj*)py_alloc(sizeof(big_pyobj));
   ret->tag = CLASS;
   ret->u.cl.attrs = create_hashtable(2, attrname_hash, attrname_equal);
 
