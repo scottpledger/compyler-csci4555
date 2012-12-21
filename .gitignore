@@ -19,3 +19,4 @@ parsetab.py
 *.apy
 *.pst
 *.kate-swp
+*.expected
