@@ -94,8 +94,10 @@ try:
     new_funs = []
     for fun in funs:
         mutils.print_debug('register allocating ' + fun.name)
-        new_funs += [RegisterAlloc3().allocate_registers(fun,
-                                                         input_file_name + '_' + fun.name)]
+        new_fun = RegisterAlloc3().allocate_registers(fun,
+                                                         input_file_name + '_' + fun.name)
+        new_funs += [new_fun]
+        mutils.write_debug(PrintVisitor3().preorder(fun),fbase+'.11.rmsc.'+str(count)+'.pst')
     funs = new_funs
     mutils.print_debug('finished register allocation')
 

@@ -91,7 +91,7 @@ void gc_collect()
 {
 	int temp_gc_alloc_slab_counter = gc_alloc_slab_counter;
 	int page_size = getpagesize();
-	int slab_size = page_size * 1000;
+	int slab_size = page_size * 10;
 	int i, j;
 	gc_init();                                                         //grab new slab to make sure we dont overwrite
 	

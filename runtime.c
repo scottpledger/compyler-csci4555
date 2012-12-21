@@ -13,6 +13,14 @@ void* py_alloc(int o_size,int p_size,int num){
   return gc_alloc(&info);
 }
 
+int py_dealloc(pyobj val){
+  if(is_big(val)){
+    gc_nullify(val);
+    return 1;
+  }
+  return 0;
+}
+
 
 /* Some forward declarations */
 static int equal_pyobj(pyobj a, pyobj b);
