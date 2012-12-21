@@ -49,6 +49,11 @@ void gc_init()
 	alloc = start_pointers[gc_alloc_slab_counter];
 }
 
+void* py_alloc(int o_size){
+	gc_type_info info = { .size_in_bytes = o_size, .pointers = {0}, .tenured = 0 };
+	return gc_alloc(&info);
+}
+
 //
 // This lamest of lame allocators simply allocates new space.
 // If there isn't enough space, we allocate a new slab
