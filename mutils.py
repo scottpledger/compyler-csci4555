@@ -89,7 +89,7 @@ def print_debug(msg=False,force=False):
   return dbg
 
 def write_debug(msg=False,filename='debug_written.txt',force=False):
-  f=open(filename,'w')
+  
   frm = inspect.stack()[1]
   mod = inspect.getmodule(frm[0])
   modName,ext = os.path.splitext(mod.__file__)
@@ -98,12 +98,13 @@ def write_debug(msg=False,filename='debug_written.txt',force=False):
     dbg = debug_mods[modName]
   
   if (dbg or force) and msg:
+    f=open(filename,'w')
     print_debug_obj(modName,frm[2],msg,f)
   
   return dbg
 
 def write_json_debug(msg=False,filename='debug_written.txt',force=False):
-  f=open(filename,'w')
+  
   frm = inspect.stack()[1]
   mod = inspect.getmodule(frm[0])
   modName,ext = os.path.splitext(mod.__file__)
@@ -112,6 +113,7 @@ def write_json_debug(msg=False,filename='debug_written.txt',force=False):
     dbg = debug_mods[modName]
   
   if (dbg or force) and msg:
+    f=open(filename,'w')
     f.write(json.dumps(msg,indent=2))
   
   return dbg
