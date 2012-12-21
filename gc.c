@@ -22,8 +22,15 @@ int * end_pointers[1000] = {ROOT_SET_NULL};
 int * alloc;
 int root_alloc = 0;
 
+void* gc_malloc(int size){
+  gc_type_info info = { .size_in_bytes = size, .pointers= {1}, .tenured=0 };
+  return gc_alloc(&info);
+}
 
-
+void* py_alloc(int o_size,int p_size,int num){
+  gc_type_info info = { .size_in_bytes = o_size + p_size*num, .pointers= {num}, .tenured=0 };
+  return gc_alloc(&info);
+}
 
 
 void gc_init()
@@ -135,13 +142,15 @@ void gc_nullify(int * index)
     index[0] = (int)NULL;
 }
 
-void gc_collet_all()
+void gc_collect_all()
 {
     int page_size = getpagesize();
     int slab_size = page_size * 1000;
     int i;
     for(i = 0; i < 1000; i++)
     {
+      if(start_pointers[i]!=ROOT_SET_NULL){
         munmap(start_pointers[i], slab_size);
+      }
     }
 }

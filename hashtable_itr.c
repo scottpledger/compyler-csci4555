@@ -4,7 +4,7 @@
 #include "hashtable_private.h"
 #include "hashtable_itr.h"
 #include <stdlib.h> /* defines NULL */
-
+#include "gc.h"
 /*****************************************************************************/
 /* hashtable_iterator    - iterator constructor */
 
@@ -13,7 +13,7 @@ hashtable_iterator(struct hashtable *h)
 {
     unsigned int i, tablelength;
     struct hashtable_itr *itr = (struct hashtable_itr *)
-        malloc(sizeof(struct hashtable_itr));
+        gc_malloc(sizeof(struct hashtable_itr));
     if (NULL == itr) return NULL;
     itr->h = h;
     itr->e = NULL;

@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+extern void* gc_malloc(int size);
+extern void* py_alloc(int o_size,int p_size,int num);
 
 //
 // These definitions describe the "root set" or the pointers

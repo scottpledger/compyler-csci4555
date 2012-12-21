@@ -89,8 +89,7 @@ struct pyobj_struct {
 };
 typedef struct pyobj_struct big_pyobj;
 
-void* py_alloc(int o_size,int p_size,int num);
-int py_dealloc(pyobj val);
+
 
 int tag(pyobj val);
 
